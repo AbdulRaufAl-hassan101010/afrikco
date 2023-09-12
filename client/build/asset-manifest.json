@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.js": "/static/js/main.0291d2f4.js",
+    "static/js/787.cda612ba.chunk.js": "/static/js/787.cda612ba.chunk.js",
+    "static/media/apple.svg": "/static/media/apple.359758e58756d20082a2ccb41db536cc.svg",
+    "static/media/gmail.svg": "/static/media/gmail.6a7b4c6cdde5e848eb30220c4d16b4bc.svg",
+    "static/media/facebook.svg": "/static/media/facebook.d02bf9e1cf359d9ca41b25811957b9a4.svg",
+    "index.html": "/index.html",
+    "main.0291d2f4.js.map": "/static/js/main.0291d2f4.js.map",
+    "787.cda612ba.chunk.js.map": "/static/js/787.cda612ba.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.0291d2f4.js"
+  ]
+}
