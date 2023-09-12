@@ -1,5 +1,5 @@
 from . import apis_blueprint
-from models.user import User
+from server.models.user import User
 
 @apis_blueprint.route('users')
 def get_users():
