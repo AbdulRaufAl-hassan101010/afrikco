@@ -7,7 +7,7 @@ from flask.helpers import send_from_directory
 # create the extension
 # db = SQLAlchemy()
 # create the app
-app = Flask(__name__, static_folder="../../client/build", static_url_path="")
+app = Flask(__name__, static_folder="../client/build", static_url_path="")
 # configure the SQLite database, relative to the app instance folder
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:12345678@localhost/afrikco'
 # # initialize the app with the extension
