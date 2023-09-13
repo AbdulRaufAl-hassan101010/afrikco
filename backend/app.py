@@ -20,7 +20,7 @@ app = Flask(__name__, static_folder="../client/build", static_url_path="")
 
 @app.route('/')
 @app.route('/product/<int:int>')
-@app.route('/product/login')
+@app.route('/login')
 def static_pages(int=None):
   return send_from_directory(app.static_folder, 'index.html')
 
