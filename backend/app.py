@@ -13,5 +13,4 @@ app.register_blueprint(apis_blueprint, url_prefix="/apis")
 def static_pages(int=None):
     return send_from_directory(app.static_folder, 'index.html')
 
-if __name__ == '__main__':
-    app.run(port=5000, debug=True)
+
