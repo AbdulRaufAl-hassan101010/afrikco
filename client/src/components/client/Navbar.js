@@ -86,7 +86,7 @@ const Navbar = () => {
             Afrikco
           </Link>
           <div className="logo-icons">
-            <Link>Login</Link>
+            <Link to="/login">Login</Link>
             <Link>
               <i className="fa-solid fa-cart-shopping fa-xl"></i>
             </Link>

@@ -17,12 +17,17 @@ app = Flask(__name__, static_folder="../client/build", static_url_path="")
 # from server.apis import apis_blueprint
 # app.register_blueprint(apis_blueprint, url_prefix="/apis")
 
+from apis import apis_blueprint
+app.register_blueprint(apis_blueprint, url_prefix="/apis")
+
 
 @app.route('/')
 @app.route('/product/<int:int>')
 @app.route('/login')
 def static_pages(int=None):
   return send_from_directory(app.static_folder, 'index.html')
+
+
 
 
 
