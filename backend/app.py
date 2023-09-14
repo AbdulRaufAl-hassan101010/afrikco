@@ -4,7 +4,7 @@ from flask.helpers import send_from_directory
 app = Flask(__name__, static_folder="../client/build", static_url_path="")
 
 # Register the 'apis' blueprint with the Flask app
-from apis.apis_blueprint import apis_blueprint  # Import the 'apis' blueprint from the 'apis' module
+from apis import apis_blueprint  # Import the 'apis' blueprint from the 'apis' module
 app.register_blueprint(apis_blueprint, url_prefix="/apis")
 
 @app.route('/')

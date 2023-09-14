@@ -1,2 +1,7 @@
-# This file can be left empty if you don't need any initialization code for the 'apis' package.
-# It's required to make 'apis' a Python package, but it doesn't need to contain any specific code.
+from flask import Blueprint, jsonify
+
+# Create a Blueprint object for your API routes
+apis_blueprint = Blueprint('apis', __name__)
+
+
+from .products import * 
