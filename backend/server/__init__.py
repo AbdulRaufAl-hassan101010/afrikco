@@ -41,3 +41,7 @@ def static_pages(int=None):
     return send_from_directory(app.static_folder, 'index.html')
 
 
+def create_app():
+    return app
+
+
