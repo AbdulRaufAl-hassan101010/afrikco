@@ -6,17 +6,17 @@ from flask_sqlalchemy import SQLAlchemy
 
 # store your mysql database connection credentials in the environment variable and get them for security reasons
 from os import environ
-db_user = environ.get("db_user")
-db_password = environ.get("db_password")
-db_name = environ.get("db_name")
-db_host = environ.get("db_host")
+DB_USERNAME = environ.get("DB_USERNAME")
+DB_PASSWORD = environ.get("DB_PASSWORD")
+DB_NAME = environ.get("DB_NAME")
+DB_HOST = environ.get("DB_HOST")
 
 app = Flask(__name__, static_folder="../client/build", static_url_path="")
 
 
 db = SQLAlchemy()
 # configure the SQLite database, relative to the app instance folder
-app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+pymysql://{db_user}:{db_password}@{db_host}/{db_name}"
+app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}"
 # initialize the app with the extension
 db.init_app(app)
 
