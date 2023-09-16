@@ -1,8 +1,5 @@
-# Import the 'apis' blueprint from the 'apis' module
-from server.apis import apis_blueprint
 from flask import Flask
 from flask.helpers import send_from_directory
-from flask_sqlalchemy import SQLAlchemy
 
 # store your mysql database connection credentials in the environment variable and get them for security reasons
 from os import environ
@@ -11,23 +8,25 @@ DB_PASSWORD = environ.get("DB_PASSWORD")
 DB_NAME = environ.get("DB_NAME")
 DB_HOST = environ.get("DB_HOST")
 
-app = Flask(__name__, static_folder="../client/build", static_url_path="")
+# Import the 'apis' blueprint from the 'apis' module
+from server.apis import apis_blueprint
+app = Flask(__name__, static_folder="../../client/build", static_url_path="")
 
 
-db = SQLAlchemy()
-# configure the SQLite database, relative to the app instance folder
-app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}"
-# initialize the app with the extension
-db.init_app(app)
+# db = SQLAlchemy()
+# # configure the SQLite database, relative to the app instance folder
+# app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}"
+# # initialize the app with the extension
+# db.init_app(app)
 
 
 
-try:
-    import server.models
-    with app.app_context():
-        db.create_all()
-except Exception as ex:
-    print(f"An error occurred: {ex}")
+# try:
+#     import server.models
+#     with app.app_context():
+#         db.create_all()
+# except Exception as ex:
+#     print(f"An error occurred: {ex}")
 
     
 # Register the 'apis' blueprint with the Flask app
