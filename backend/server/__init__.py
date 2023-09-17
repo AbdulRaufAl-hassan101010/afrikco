@@ -1,47 +1,55 @@
-from flask import Flask
+from flask import Flask, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
-from flask.helpers import send_from_directory
-
-# store your mysql database connection credentials in the environment variable and get them for security reasons
+from sqlalchemy import event
+from sqlalchemy.pool import Pool
 from os import environ
+
+# Load database credentials from environment variables
 DB_USERNAME = environ.get("DB_USERNAME")
 DB_PASSWORD = environ.get("DB_PASSWORD")
 DB_NAME = environ.get("DB_NAME")
 DB_HOST = environ.get("DB_HOST")
 
-
 app = Flask(__name__, static_folder="../../client/build", static_url_path="")
-
-
 db = SQLAlchemy()
-# configure the SQLite database, relative to the app instance folder
+
+# Configure the MySQL database connection URI
 app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}"
-# initialize the app with the extension
+
+# Initialize the app with the SQLAlchemy extension
 db.init_app(app)
 
-print(1234)
+# Define the reconnect_on_disconnect function for middleware
+def reconnect_on_disconnect(dbapi_con, connection_record):
+    if connection_record.connection is None:
+        raise dbapi_con.DisconnectionError("Database connection was closed unexpectedly.")
+    return
 
-try:
-    import server.models
-    with app.app_context():
-        db.create_all()
-except Exception as ex:
-    print(f"An error occurred: {ex}")
+# Register the event listener for disconnect events
+event.listen(Pool, 'checkout', reconnect_on_disconnect)
+
+# Create database tables if they don't exist
+if __name__ == '__main__':
+    try:
+        with app.app_context():
+            import server.models  # Import your models
+            db.create_all()
+    except Exception as ex:
+        print(f"An error occurred: {ex}")
 
 # Import the 'apis' blueprint from the 'apis' module
-from server.apis import apis_blueprint    
+from server.apis import apis_blueprint
+
 # Register the 'apis' blueprint with the Flask app
 app.register_blueprint(apis_blueprint, url_prefix="/apis")
 
-
+# Define routes for static pages
 @app.route('/')
 @app.route('/product/<int:int>')
 @app.route('/login')
 def static_pages(int=None):
     return send_from_directory(app.static_folder, 'index.html')
 
-
+# Define a function to create the Flask app
 def create_app():
     return app
-
-
