@@ -16,8 +16,6 @@ app = Flask(__name__, static_folder="../../client/build", static_url_path="")
 db = SQLAlchemy()
 # configure the SQLite database, relative to the app instance folder
 app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}"
-app.config['SQLALCHEMY_POOL_SIZE'] = 10  # Set your desired pool size
-app.config['SQLALCHEMY_POOL_RECYCLE'] = 3600  # Set a recycling time (1 hour in seconds)
 # initialize the app with the extension
 db.init_app(app)
 
