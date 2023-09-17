@@ -12,8 +12,8 @@ class Comment(db.Model):
     # Define the foreign key relationship to Product
     product_id = db.Column(db.Integer, db.ForeignKey('products.product_id'), nullable=False)
 
-    # Define a relationship to access the Product model
-    product = db.relationship('Product', backref=db.backref('comments', lazy=True))
+    # # Define a relationship to access the Product model
+    # product = db.relationship('Product', backref=db.backref('comments', lazy=True))
 
     def __init__(self, text, product_id):
         self.text = text

@@ -34,14 +34,18 @@ def get_roles(id=None):
             else:
                 return jsonify({"error": "Role not found"}), 404
         else:
-            # Retrieve all categories
-            categories = Role.query.all()
-            serialized_data = serialize(categories)
+            # Retrieve all roles
+            roles = Role.query.all()
+
+            if len(roles) < 1:
+                return [], 200
+            
+            serialized_data = serialize(roles)
             return jsonify(serialized_data), 200
 
     except Exception as error:
         print(error)
-        return jsonify({"error": "Failed to retrieve categories"}), 500
+        return jsonify({"error": "Failed to retrieve roles"}), 500
     
 
 def update_role(id):

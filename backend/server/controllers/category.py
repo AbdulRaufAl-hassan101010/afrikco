@@ -36,6 +36,9 @@ def get_categories(id=None):
         else:
             # Retrieve all categories
             categories = Category.query.all()
+
+            if len(categories) < 1:
+                return [], 200
             serialized_data = serialize(categories)
             return jsonify(serialized_data), 200
 
