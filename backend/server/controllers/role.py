@@ -1,9 +1,9 @@
 from flask import request, jsonify
-from server.models import Category
+from server.models import Role
 from server import db
 from server.apis.utils import serialize
 
-def add_category():
+def add_role():
     try:
         # get json data from client
         form_data = request.get_json()
@@ -11,31 +11,31 @@ def add_category():
 
         # validate and refine data
         # save to database
-        category = Category(name=name)
-        db.session.add(category)
+        role = Role(name=name)
+        db.session.add(role)
         db.session.commit()
 
-        serialized_data = serialize(category)
+        serialized_data = serialize(role)
         return jsonify(serialized_data), 201
 
     except Exception as error:
         print(error)
-        return "add category error"
+        return "add role error"
     
 
-def get_categories(id=None):
+def get_roles(id=None):
     try:
         if id is not None:
-            # Retrieve a specific category by ID
-            category = Category.query.get(id)
-            if category is not None:
-                serialized_data = serialize(category)
+            # Retrieve a specific role by ID
+            role = Role.query.get(id)
+            if role is not None:
+                serialized_data = serialize(role)
                 return jsonify(serialized_data), 200
             else:
-                return jsonify({"error": "Category not found"}), 404
+                return jsonify({"error": "Role not found"}), 404
         else:
             # Retrieve all categories
-            categories = Category.query.all()
+            categories = Role.query.all()
             serialized_data = serialize(categories)
             return jsonify(serialized_data), 200
 
@@ -44,14 +44,14 @@ def get_categories(id=None):
         return jsonify({"error": "Failed to retrieve categories"}), 500
     
 
-def update_category(id):
+def update_role(id):
     try:
-        # Retrieve the existing category by id
-        category = Category.query.get(id)
+        # Retrieve the existing role by id
+        role = Role.query.get(id)
 
-        # Check if the category exists
-        if category is None:
-            return jsonify({"error": "Category not found"}), 404
+        # Check if the role exists
+        if role is None:
+            return jsonify({"error": "Role not found"}), 404
 
         # Extract the new name from the request JSON data
         data = request.get_json()
@@ -59,17 +59,17 @@ def update_category(id):
 
         # Update the name field if a new name is provided
         if new_name is not None:
-            category.name = new_name
+            role.name = new_name
 
             # Commit the changes to the database
             db.session.commit()
 
-            # Serialize and return the updated category
-            serialized_data = serialize(category)
+            # Serialize and return the updated role
+            serialized_data = serialize(role)
             return jsonify(serialized_data), 200
         else:
             return jsonify({"error": "Invalid or missing 'name' field in the request"}), 400
 
     except Exception as error:
         print(error)
-        return jsonify({"error": "Failed to update category"}), 500
+        return jsonify({"error": "Failed to update role"}), 500

@@ -20,6 +20,7 @@ db.init_app(app)
 
 # Create database tables if they don't exist
 if __name__ == '__main__':
+    print(db.engine.connect())
     try:
         with app.app_context():
             import server.models  # Import your models

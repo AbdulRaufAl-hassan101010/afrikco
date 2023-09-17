@@ -11,7 +11,7 @@ def add_category_route():
 @apis_blueprint.route('/categories', methods=['GET'])
 @apis_blueprint.route('/categories/<int:id>', methods=['GET'])
 def get_categories_route(id=None):
-    return get_categories()
+    return get_categories(id)
 
 
 # Define the route for updating a category by id
