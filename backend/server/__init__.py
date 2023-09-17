@@ -20,8 +20,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+pymysql://{DB_USERNAME}:{DB_PASS
 db.init_app(app)
 
 # Define the reconnect_on_disconnect function for middleware
-def reconnect_on_disconnect(dbapi_con, connection_record):
-    if connection_record.connection is None:
+def reconnect_on_disconnect(dbapi_con, con_record, con_proxy):
+    if con_record.connection is None:
         raise dbapi_con.DisconnectionError("Database connection was closed unexpectedly.")
     return
 
