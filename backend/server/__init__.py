@@ -19,14 +19,13 @@ db.init_app(app)
 
 
 # Create database tables if they don't exist
-if __name__ == '__main__':
-    try:
-        with app.app_context():
-            import server.models  # Import your models
-            db.create_all()
-        # print(db.engine.connect())
-    except Exception as ex:
-        print(f"An error occurred: {ex}")
+try:
+    with app.app_context():
+        import server.models  # Import your models
+        db.create_all()
+    db.engine.connect()
+except Exception as ex:
+    print(f"An error occurred: {ex}")
 
 # Import the 'apis' blueprint from the 'apis' module
 from server.apis import apis_blueprint
