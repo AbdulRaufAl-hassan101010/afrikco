@@ -19,7 +19,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+pymysql://{DB_USERNAME}:{DB_PASS
 # initialize the app with the extension
 db.init_app(app)
 
-
+print(1234)
 
 try:
     import server.models
