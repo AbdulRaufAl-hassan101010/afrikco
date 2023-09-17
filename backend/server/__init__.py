@@ -24,7 +24,7 @@ if __name__ == '__main__':
         with app.app_context():
             import server.models  # Import your models
             db.create_all()
-        print(db.engine.connect())
+        # print(db.engine.connect())
     except Exception as ex:
         print(f"An error occurred: {ex}")
 
