@@ -4,6 +4,7 @@ from server import db
 from server.apis.utils import serialize
 
 def add_category():
+    print(db.engine.connect())
     try:
         # get json data from client
         form_data = request.get_json()
@@ -24,6 +25,7 @@ def add_category():
     
 
 def get_categories(id=None):
+    print(db.engine.connect())
     try:
         if id is not None:
             # Retrieve a specific category by ID
@@ -45,6 +47,7 @@ def get_categories(id=None):
     
 
 def update_category(id):
+    print(db.engine.connect())
     try:
         # Retrieve the existing category by id
         category = Category.query.get(id)

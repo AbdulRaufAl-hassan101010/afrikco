@@ -1,7 +1,5 @@
 from flask import Flask, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import event
-from sqlalchemy.pool import Pool
 from os import environ
 
 # Load database credentials from environment variables
@@ -19,14 +17,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+pymysql://{DB_USERNAME}:{DB_PASS
 # Initialize the app with the SQLAlchemy extension
 db.init_app(app)
 
-# Define the reconnect_on_disconnect function for middleware
-def reconnect_on_disconnect(dbapi_con, con_record, con_proxy):
-    if con_record.connection is None:
-        raise dbapi_con.DisconnectionError("Database connection was closed unexpectedly.")
-    return
-
-# Register the event listener for disconnect events
-event.listen(Pool, 'checkout', reconnect_on_disconnect)
 
 # Create database tables if they don't exist
 if __name__ == '__main__':
