@@ -42,14 +42,6 @@ app.register_blueprint(apis_blueprint, url_prefix="/apis")
 def static_pages(int=None):
     return send_from_directory(app.static_folder, 'index.html')
 
-@app.route("/db")
-def db_connect():
-    try:
-        db.engine.dispose()
-        db.engine.connect
-        return "True"
-    except Exception as error:
-        return "False"
 
 # Define a function to create the Flask app
 def create_app():
