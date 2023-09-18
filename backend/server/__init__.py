@@ -24,8 +24,10 @@ try:
         import server.models  # Import your models
         db.create_all()
     
+    
 except Exception as ex:
     print(f"An error occurred: {ex}")
+
 
 # Import the 'apis' blueprint from the 'apis' module
 from server.apis import apis_blueprint
@@ -39,6 +41,15 @@ app.register_blueprint(apis_blueprint, url_prefix="/apis")
 @app.route('/login')
 def static_pages(int=None):
     return send_from_directory(app.static_folder, 'index.html')
+
+@app.route("/db")
+def db_connect():
+    try:
+        db.engine.dispose()
+        db.engine.connect
+        return "True"
+    except Exception as error:
+        return "False"
 
 # Define a function to create the Flask app
 def create_app():
