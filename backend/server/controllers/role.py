@@ -5,6 +5,7 @@ from server.apis.utils import serialize
 
 def add_role():
     try:
+        db.engine.connect()
         # get json data from client
         form_data = request.get_json()
         name = form_data.get('name')
@@ -25,6 +26,7 @@ def add_role():
 
 def get_roles(id=None):
     try:
+        db.engine.connect()
         if id is not None:
             # Retrieve a specific role by ID
             role = Role.query.get(id)
@@ -50,6 +52,7 @@ def get_roles(id=None):
 
 def update_role(id):
     try:
+        db.engine.connect()
         # Retrieve the existing role by id
         role = Role.query.get(id)
 
