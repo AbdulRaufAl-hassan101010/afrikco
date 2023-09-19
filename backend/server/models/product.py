@@ -16,7 +16,7 @@ class Product(db.Model):
     category = db.relationship('Category', backref=db.backref('products', lazy=True))
 
     # Define a relationship to access the Comment model
-    product = db.relationship('Comment', backref=db.backref('products', lazy=True))
+    comments = db.relationship('Comment', backref=db.backref('products', lazy=True))
 
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
