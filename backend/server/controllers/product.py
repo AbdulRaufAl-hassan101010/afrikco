@@ -12,10 +12,13 @@ def add_product():
         description = form_data.get('description')
         price = form_data.get('price')
         category_id = form_data.get('category_id')
+        image_url = form_data.get('image_url')
+
+        print(image_url)
 
         # validate and refine data
         # save to database
-        product = Product(name=name,description=description, price=price, category_id=category_id)
+        product = Product(name=name,description=description, price=price, category_id=category_id, image_url=image_url)
         db.session.add(product)
         db.session.commit()
 
