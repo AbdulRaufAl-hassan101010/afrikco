@@ -1,7 +1,6 @@
 from flask import request, jsonify, session
 from server import db
 from server.models import User  # Import the User model
-from server.apis.api_blueprint import apis_blueprint
 from server.apis.utils import serialize
 
 # Create a route to login a new user
@@ -62,7 +61,6 @@ def create_user():
 
 
 # Create a route to retrieve all users
-@apis_blueprint.route('/users', methods=['GET'])
 def get_users():
     users = User.query.all()
     serialized_data = serialize(users)

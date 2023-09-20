@@ -1,8 +1,4 @@
-from flask import request, jsonify, session
-from server import db
-from server.models import User  # Import the User model
 from server.apis.api_blueprint import apis_blueprint
-from server.apis.utils import serialize
 from server.controllers.user import *
 
 # Create a route to login a new user
