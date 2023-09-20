@@ -7,12 +7,15 @@ DB_USERNAME = environ.get("DB_USERNAME")
 DB_PASSWORD = environ.get("DB_PASSWORD")
 DB_NAME = environ.get("DB_NAME")
 DB_HOST = environ.get("DB_HOST")
+SECRET = environ.get("SECRET")
 
 app = Flask(__name__, static_folder="../../client/build", static_url_path="")
 db = SQLAlchemy()
 
 # Configure the MySQL database connection URI
 app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}"
+app.config['SECRET_KEY'] = SECRET
+
 
 # Initialize the app with the SQLAlchemy extension
 db.init_app(app)

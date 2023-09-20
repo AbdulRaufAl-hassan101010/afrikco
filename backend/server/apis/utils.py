@@ -1,14 +1,4 @@
-from flask import jsonify, session
 from sqlalchemy.orm import class_mapper
-from server.apis.api_blueprint import apis_blueprint
-
-
-@apis_blueprint.route("/logout", methods=["GET"])
-def logout():
-    # Clear the session
-    session.clear()
-    return jsonify({}), 200
-
 
 def serialize(model):
     """Serialize SQLAlchemy model object to a dictionary."""
