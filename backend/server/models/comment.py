@@ -16,7 +16,7 @@ class Comment(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
 
     # # Define a relationship to access the Product model
-    # product = db.relationship('Product', backref=db.backref('comments', lazy=True))
+    user = db.relationship('User', backref=db.backref('comments', lazy=True))
 
     def __init__(self, text, product_id, user_id):
         self.text = text

@@ -17,7 +17,7 @@ def login_user():
         user = User.query.filter_by(email=email).first()
 
         if user is None or user.check_password(password) is False:
-            return jsonify({"error": "Invalid credentials"}), 401
+            return jsonify({"error": "Invalid credentials"}), 400
         
         serialized_data = serialize(user)
 

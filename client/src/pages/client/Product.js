@@ -3,8 +3,10 @@ import Navbar from '../../components/client/Navbar';
 import Card from '../../components/Card';
 import { useEffect, useState } from 'react';
 import data from '../../data';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import Products from '../../components/client/Products';
+import axios from 'axios';
+import Rating from '../../components/Rating';
 
 const Styles = styled.div`
   .top {
@@ -66,13 +68,41 @@ const Styles = styled.div`
   }
 `;
 
+function generateNumbers(limit) {
+  return Array.from({ length: limit }, (_, index) => index + 1);
+}
+
 const Product = () => {
   const { id } = useParams();
   const [product, setProduct] = useState({});
+  const [comments, setComments] = useState([]);
 
+  // GET PRODUCT BY ID
   useEffect(() => {
-    const productData = data.find((product) => product.id === parseInt(id));
-    setProduct(productData);
+    const fetchProducts = async () => {
+      try {
+        const res = await axios(`/apis/products?id=${id}`);
+        setProduct(res.data);
+      } catch (error) {
+        console.log(`couldn't featch products`);
+      }
+    };
+
+    fetchProducts();
+  }, [id]);
+
+  // GET PRODUCT COMMENTS
+  useEffect(() => {
+    const fetchComments = async () => {
+      try {
+        const res = await axios(`/apis/ratings/${id}`);
+        setComments(res.data);
+      } catch (error) {
+        console.log(`couldn't featch comments`);
+      }
+    };
+
+    fetchComments();
   }, [id]);
 
   return (
@@ -98,26 +128,23 @@ const Product = () => {
               <h1>{product.name}</h1>
               <i className="fa-solid fa-heart fa-xl"></i>
             </div>
+            <div className="mb-1 text-grey">
+              Category: <Link to="/">{product.category}</Link>{' '}
+            </div>
             <div className="mb-1">
               <span className="text-grey">Ratings:</span>{' '}
-              <i className="fa-solid fa-star fa-lg"></i>
-              {}
-              <i className="fa-solid fa-star fa-lg"></i>
-              <i className="fa-solid fa-star fa-lg"></i>
-              <i className="fa-solid fa-star fa-lg"></i>
-              <i className="fa-solid fa-star fa-lg"></i>{' '}
-              <span className="text-grey">(10 reviews)</span>
+              {<Rating rating={product.rating} />}
+              <span className="text-grey"> ({comments.length} reviews)</span>
             </div>
             <div className="mb-1 text-grey">Price: &#x20B5;{product.price}</div>
-            <div className="mb-1 text-grey">Qty: 1</div>
             <div className="type">
-              <h3>Type</h3>
+              <h3>Quantity</h3>
               <div>
-                <span className="list">sm</span>
-                <span className="list">lg</span>
-                <span className="list">xl</span>
-                <span className="list">xxl</span>
-                <span className="list">xxxl</span>
+                <select name="" id="">
+                  {generateNumbers(product.quantity).map((quantity) => (
+                    <option key={quantity * 3}>{quantity}</option>
+                  ))}
+                </select>
               </div>
             </div>
           </Card>
@@ -133,14 +160,14 @@ const Product = () => {
         {/* comments */}
         <div className="container">
           <h3 className="mb-1">Comments</h3>
-          <Card className="mb-1">
-            <b>Jon</b>
-            <div className="text-grey">Best Yam</div>
-          </Card>
-          <Card className="mb-1">
-            <b>Jon</b>
-            <div className="text-grey">Best Yam</div>
-          </Card>
+          {/* display comments */}
+          {comments.map(({ text, username, comment, score }, index) => (
+            <Card className="mb-1" key={index * 100}>
+              <b>{username}</b>
+              <div className="text-grey">{comment}</div>
+              <div>{<Rating rating={score} />}</div>
+            </Card>
+          ))}
         </div>
       </Styles>
     </>

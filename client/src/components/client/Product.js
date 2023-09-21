@@ -63,11 +63,11 @@ const Styles = styled.article`
 `;
 
 const Product = (props) => {
-  const { id, image, name, price } = props.data;
+  const { product_id, image_url, name, price } = props.data;
   return (
     <Styles>
       <div className="img">
-        <img loading="lazy" src={image} alt="" />
+        <img loading="lazy" src={image_url} alt="" />
         <div className="icons">
           <ul className="flex jc-sb">
             <li>
@@ -85,7 +85,7 @@ const Product = (props) => {
       </div>
       <div className="body">
         <p>
-          <Link to={`/product/${id}`}>{name}</Link>
+          <Link to={`/product/${product_id}`}>{name}</Link>
         </p>
         <p className="price">&#x20B5; {price}</p>
       </div>

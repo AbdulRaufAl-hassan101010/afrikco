@@ -25,9 +25,9 @@ const Wrapper = ({ isButton, children }) => {
   return isButton ? <button>{children}</button> : <Link>{children}</Link>;
 };
 
-const Button = ({ isButton = 'true', children, display }) => {
+const Button = ({ isButton = 'true', children, display, className }) => {
   return (
-    <Styles display={display}>
+    <Styles className={className} display={display}>
       <Wrapper isButton={isButton}>{children}</Wrapper>
     </Styles>
   );

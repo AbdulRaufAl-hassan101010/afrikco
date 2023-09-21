@@ -26,6 +26,11 @@ def create_rating():
 def get_ratings(product_id):
     ratings = Rating.query.filter_by(product_id=product_id).all()
     serialized_data = serialize(ratings)
+
+    for index, rating in enumerate(ratings):
+        user = serialize(rating.user)
+        serialized_data[index]['username'] = user['username']
+        
     return jsonify(serialized_data), 200
 
 

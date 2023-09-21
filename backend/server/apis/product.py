@@ -18,3 +18,8 @@ def get_products_route(id=None):
 @apis_blueprint.route('products/<int:id>', methods=['PUT'])
 def update_product_route(id):
     return update_product(id)
+
+# Define the route to return number of products
+@apis_blueprint.route('products/count', methods=['GET'])
+def products_count_route():
+    return products_count()

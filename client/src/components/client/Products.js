@@ -45,7 +45,10 @@ const Products = ({ header, data }) => {
       </h3>
       <div className="products">
         {data.map((product) => (
-          <Product key={product.id} data={product} />
+          <Product
+            key={product.product_id || product.id}
+            data={product}
+          />
         ))}
       </div>
     </Styles>

@@ -29,10 +29,18 @@ def create_comment():
         return jsonify({"error": str(e)}), 500
     
 
-def get_comments():
-    comments = Comment.query.all()
-    serialized_comments = serialize(comments)
-    return jsonify(serialized_comments), 200
+def get_comments(product_id):
+    try:
+        comments = Comment.query.filter_by(product_id= product_id).all()
+        serialized_comments = serialize(comments)
+
+        for index, comment in enumerate(comments):
+            user = serialize(comment.user)
+            serialized_comments[index]['username'] = user['username']
+            
+        return jsonify(serialized_comments), 200
+    except Exception as err:
+        return jsonify(str(err))
 
 
 def get_comment(comment_id):

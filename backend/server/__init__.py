@@ -1,6 +1,7 @@
 from flask import Flask, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from os import environ
+from flask_cors import CORS
 
 # Load database credentials from environment variables
 DB_USERNAME = environ.get("DB_USERNAME")
@@ -11,6 +12,7 @@ SECRET = environ.get("SECRET")
 
 app = Flask(__name__, static_folder="../../client/build", static_url_path="")
 db = SQLAlchemy()
+CORS(app)
 
 # Configure the MySQL database connection URI
 app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}"

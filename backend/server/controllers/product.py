@@ -4,6 +4,13 @@ from server import db
 from server.apis.utils import serialize
 from sqlalchemy import desc, asc, or_
 
+def products_count():
+    try:
+        products_count = Product.query.count()
+        return jsonify(products_count)
+    except Exception as error:
+        return jsonify(str(error))
+
 def add_product():
     try:
         # get json data from client
@@ -37,6 +44,7 @@ def get_products(id=None):
         order = request.args.get('order', 'desc')
         order_column = request.args.get('order_column', 'created_at')
         search = request.args.get('search', None)
+        limit = request.args.get('limit', None)
 
         # Create the base query for the Product table
         query = Product.query
@@ -58,6 +66,10 @@ def get_products(id=None):
         else:
             query = query.order_by(asc(getattr(Product, order_column)))
 
+        if(limit):
+            query = query.limit(limit)
+        
+
         # Execute the query and retrieve the results
         products = query.all()
         if products is None:
@@ -69,7 +81,9 @@ def get_products(id=None):
         serialized_data = serialize(products)
 
         if id:
-         return jsonify(serialized_data[0]), 200
+            serialized_category_data = serialize(products[0].category)         
+            serialized_data[0]['category'] = serialized_category_data['name']
+            return jsonify(serialized_data[0]), 200
 
         return jsonify(serialized_data), 200
 

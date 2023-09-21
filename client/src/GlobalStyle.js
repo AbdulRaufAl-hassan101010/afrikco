@@ -68,7 +68,17 @@ img {
 .text-grey {
   color: #757575;
 }
+.text-light {
+  color: #ddd
+}
+.text-gold {
+  color: gold
+}
 
+
+.mb-0 {
+  margin-bottom: 0;
+}
 .mb-1 {
   margin-bottom: 1rem
 }

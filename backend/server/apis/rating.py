@@ -6,7 +6,7 @@ from server.controllers.rating import *
 def create_rating_route():
     return create_rating()
 
-# Create a route to retrieve all ratings
+# Create a route to retrieve all ratings for a product
 @apis_blueprint.route('ratings/<int:product_id>', methods=['GET'])
 def get_ratings_route(product_id):
     return get_ratings(product_id=product_id)

@@ -4,3 +4,5 @@ from .product import *
 from .user import *
 from .comment import *
 from .rating import *
+from .order_status import *
+from .order import *

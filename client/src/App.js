@@ -3,6 +3,10 @@ import Home from './pages/client/Home';
 import Product from './pages/client/Product';
 import Login from './pages/client/Login';
 
+
+// dashboard
+import DashboardHome from './pages/dashboard/Home'
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -15,6 +19,10 @@ const router = createBrowserRouter([
   {
     path: '/login',
     element: <Login />,
+  },
+  {
+    path: '/dashboard',
+    element: <DashboardHome />,
   },
 ]);
 

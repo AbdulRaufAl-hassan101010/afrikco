@@ -67,7 +67,7 @@ const Styles = styled.header`
   .a {
     background: rgba(249, 165, 179, 0.3);
     background-size: cover;
-    padding-left: ${(props) => props.navbarmarginleft || 0};
+    padding-left: ${(props) => (props.$navbarmarginleft || 0)};
   }
   .b {
     background: rgba(0, 128, 128, 0.3);
@@ -129,7 +129,7 @@ const HeroSection = () => {
   }, []); // Empty dependency array means this effect runs only once when the component mounts
 
   return (
-    <Styles navbarmarginleft={navbarMarginLeft || 0}>
+    <Styles $navbarmarginleft={navbarMarginLeft || 0}>
       <div className="hero-item a left main">
         <div>
           <h1>Africa No. Best Shop</h1>
