@@ -7,18 +7,19 @@ import Login from './pages/client/Login';
 // dashboard
 import DashboardHome from './pages/dashboard/Home'
 
+
 const router = createBrowserRouter([
   {
     path: '/',
     element: <Home />,
   },
   {
-    path: '/product/:id',
+    path: '/products/:id',
     element: <Product />,
   },
   {
     path: '/login',
-    element: <Login />,
+    element: <Login/>,
   },
   {
     path: '/dashboard',

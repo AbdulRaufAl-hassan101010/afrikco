@@ -1,5 +1,8 @@
+
+from flask import session 
 from server.apis.api_blueprint import apis_blueprint
 from server.controllers.user import *
+from server.middlewares.auth_required import auth_required
 
 # Create a route to login a new user
 @apis_blueprint.route('users/login', methods=['POST'])
@@ -18,7 +21,15 @@ def create_user_route():
 # Create a route to retrieve all users
 @apis_blueprint.route('users', methods=['GET'])
 def get_users_route():
-    return get_users
+    return get_users()
+
+
+# verify auth
+@apis_blueprint.route('users/auth', methods=['GET'])
+@auth_required
+def verify_auth():
+    return get_user(session.get('user_id'))
+
 
 
 
@@ -35,6 +46,6 @@ def update_user_route(id):
 
 
 # Create a route to logout user
-@apis_blueprint.route("users/logout", methods=["POST"])
+@apis_blueprint.route("users/logout", methods=["POST", "GET"])
 def logout_route():
     return logout()

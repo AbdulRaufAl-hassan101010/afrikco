@@ -3,10 +3,12 @@ import Navbar from '../../components/client/Navbar';
 import Card from '../../components/Card';
 import { useEffect, useState } from 'react';
 import data from '../../data';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import Products from '../../components/client/Products';
 import axios from 'axios';
 import Rating from '../../components/Rating';
+import Button from '../../components/Button';
+import Alert from '../../components/Alert';
 
 const Styles = styled.div`
   .top {
@@ -74,8 +76,15 @@ function generateNumbers(limit) {
 
 const Product = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const { prevQuantity } = location.state !== null ? location.state : {};
+
   const [product, setProduct] = useState({});
   const [comments, setComments] = useState([]);
+  const [selectedQuantity, setSelectedQuanity] = useState(prevQuantity || 1);
+  const [message, setMessage] = useState(null);
 
   // GET PRODUCT BY ID
   useEffect(() => {
@@ -105,8 +114,51 @@ const Product = () => {
     fetchComments();
   }, [id]);
 
+  // useEffect(() => console.log(selectedQuantity))
+
+  const addToCartHandler = async () => {
+    setMessage(null);
+    try {
+      const data = {
+        product_id: parseInt(id),
+        quantity: parseInt(selectedQuantity),
+      };
+      await axios.post(`/apis/carts`, data);
+      // display success message
+      setMessage({ message: 'Added to Cart' });
+    } catch (error) {
+      // display error message
+      setMessage({
+        message: "Couldn't add to cart something went wrong",
+        type: 'danger',
+      });
+
+      // redirect to login if not logged in
+      if (error.response.status === 401) {
+        navigate('/login', {
+          state: {
+            previousUrl: `/products/${id}`,
+            prevQuantity: selectedQuantity,
+          },
+        });
+      }
+
+      // redirect to login if not logged in
+      if (error.response.status === 400) {
+        // display duplicate error message
+        setMessage({
+          message: 'Product already exists',
+          type: 'danger',
+        });
+      }
+
+      console.log(error);
+    }
+  };
+
   return (
     <>
+      {message && <Alert message={message.message} type={message.type} />}
       <Navbar />
       <Styles>
         <div className="top container">
@@ -137,15 +189,27 @@ const Product = () => {
               <span className="text-grey"> ({comments.length} reviews)</span>
             </div>
             <div className="mb-1 text-grey">Price: &#x20B5;{product.price}</div>
-            <div className="type">
+            <div className="type mb-1">
               <h3>Quantity</h3>
               <div>
-                <select name="" id="">
+                <select
+                  name=""
+                  id=""
+                  value={selectedQuantity}
+                  onChange={(event) => setSelectedQuanity(event.target.value)}
+                >
                   {generateNumbers(product.quantity).map((quantity) => (
-                    <option key={quantity * 3}>{quantity}</option>
+                    <option key={quantity * 3} value={quantity}>
+                      {quantity}
+                    </option>
                   ))}
                 </select>
               </div>
+            </div>
+            <div>
+              <Button isButton="true" onClick={addToCartHandler}>
+                Add to cart
+              </Button>
             </div>
           </Card>
         </div>

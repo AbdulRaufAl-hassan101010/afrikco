@@ -20,10 +20,12 @@ class Order(db.Model):
 
    
 
-    def __init__(self, product_id, price, quantity):
+    def __init__(self, product_id, price, quantity, user_id, order_status_id=1):
         self.product_id = product_id
         self.price = price
         self.quantity = quantity
+        self.user_id = user_id
+        self.order_status_id = order_status_id
         
     def __repr__(self):
         return f'<Order {self.order_id}: Product {self.product_id}>'

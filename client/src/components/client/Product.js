@@ -85,7 +85,7 @@ const Product = (props) => {
       </div>
       <div className="body">
         <p>
-          <Link to={`/product/${product_id}`}>{name}</Link>
+          <Link to={`/products/${product_id}`}>{name}</Link>
         </p>
         <p className="price">&#x20B5; {price}</p>
       </div>

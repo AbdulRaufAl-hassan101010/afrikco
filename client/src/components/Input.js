@@ -11,9 +11,21 @@ const Styles = styled.div`
 `;
 
 const Input = ({ placeholder = '', value, update, type = 'text' }) => {
+
+  const onChangeHandler = (event) => {
+    if (update) {
+      update(event.target.value);
+    }
+  };
+
   return (
     <Styles>
-      <input type={type} placeholder={placeholder} value={value} />
+      <input
+        type={type}
+        placeholder={placeholder}
+        defaultValue={value}
+        onChange={onChangeHandler}
+      />
     </Styles>
   );
 };

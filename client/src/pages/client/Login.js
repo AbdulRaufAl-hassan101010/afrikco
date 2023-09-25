@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
@@ -6,7 +6,8 @@ import Navbar from '../../components/client/Navbar';
 import facebookSvg from '../../assets/svgs/facebook.svg';
 import appleSvg from '../../assets/svgs/apple.svg';
 import gmailSvg from '../../assets/svgs/gmail.svg';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import axios from 'axios';
 
 const Styles = styled.main`
   display: flex;
@@ -62,6 +63,46 @@ const Styles = styled.main`
 `;
 
 const Login = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const navigation = useNavigate();
+  const location = useLocation();
+
+  // Get the previous URL
+  const { previousUrl, prevQuantity } =
+    location.state !== null ? location.state : {};
+
+  useEffect(() => {
+    (async () => {
+      try {
+        await axios('apis/users/auth');
+        setIsLoggedIn(true);
+        isLoggedIn && navigation(previousUrl || '/');
+      } catch (error) {
+        console.log(error);
+      }
+    })();
+  }, [isLoggedIn, navigation, previousUrl]);
+
+  const loginHandler = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.post('/apis/users/login', { email, password });
+
+      if (previousUrl) {
+        return navigation(previousUrl || '/', {
+          state: {
+            prevQuantity: prevQuantity,
+          },
+        });
+      }
+      return navigation('/');
+    } catch (error) {
+      console.log('Invalid credentails', error);
+    }
+  };
   return (
     <>
       <Navbar />
@@ -70,9 +111,20 @@ const Login = () => {
           <form action="">
             <legend className="mb-1 text-center">Login</legend>
             <fieldset>
-              <Input placeholder="Username/email" />
-              <Input placeholder="password" type="password" />
-              <Button display="block">Login</Button>
+              <Input
+                placeholder="Username/email"
+                update={setEmail}
+                value={email}
+              />
+              <Input
+                placeholder="password"
+                type="password"
+                update={setPassword}
+                value={password}
+              />
+              <Button display="block" isButton={'true'} onClick={loginHandler}>
+                Login
+              </Button>
             </fieldset>
           </form>
 

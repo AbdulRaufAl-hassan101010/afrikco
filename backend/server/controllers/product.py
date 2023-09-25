@@ -10,6 +10,13 @@ def products_count():
         return jsonify(products_count)
     except Exception as error:
         return jsonify(str(error))
+    
+def get_product(id):
+    try:
+        product = Product.query.get(id)
+        return product
+    except Exception:
+        return None
 
 def add_product():
     try:

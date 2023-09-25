@@ -42,9 +42,9 @@ app.register_blueprint(apis_blueprint, url_prefix="/apis")
 
 # Define routes for static pages
 @app.route('/')
-@app.route('/product/<int:int>')
+@app.route('/products/<int:id>')
 @app.route('/login')
-def static_pages(int=None):
+def static_pages(id=None):
     return send_from_directory(app.static_folder, 'index.html')
 
 

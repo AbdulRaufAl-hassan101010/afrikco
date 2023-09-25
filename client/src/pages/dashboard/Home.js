@@ -32,12 +32,12 @@ const Styles = styled.div`
 
 const Home = () => {
   const [productsConut, setProductsCount] = useState(0);
+  const [ordersCount, setOrdersCount] = useState(0);
   const [products, setProducts] = useState([]);
 
-  const fetchProducts = async (url, updateState) => {
+  const fetch = async (url, updateState) => {
     try {
       const res = await axios(url);
-      console.log(res.data);
       updateState(res.data);
     } catch (error) {
       console.log(`couldn't fetch products`);
@@ -46,12 +46,17 @@ const Home = () => {
 
   // GET PRODUCTS COUNT
   useEffect(() => {
-    fetchProducts('/apis/products/count', setProductsCount);
+    fetch('/apis/products/count', setProductsCount);
+  }, []);
+
+  // GET Orders COUNT
+  useEffect(() => {
+    fetch('/apis/orders/count', setOrdersCount);
   }, []);
 
   // GET PRODUCTS
   useEffect(() => {
-    fetchProducts(`/apis/products`, setProducts);
+    fetch(`/apis/products`, setProducts);
   }, []);
 
   return (
@@ -68,7 +73,10 @@ const Home = () => {
               <hr />
             </li>
             <li className="mb-1">
-              <Link to="">Orders</Link>
+              <div className="flex jc-sb">
+                <Link to="">Orders</Link>
+                <span>{ordersCount}</span>
+              </div>
               <hr />
             </li>
             <li className="mb-1">

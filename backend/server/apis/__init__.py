@@ -5,3 +5,4 @@ from .comment import *
 from .rating import *
 from .user import *
 from .order import *
+from .cart import *

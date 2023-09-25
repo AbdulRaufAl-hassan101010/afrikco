@@ -13,7 +13,6 @@ const Home = () => {
   const fetchProducts = async (url, updateState) => {
     try {
       const res = await axios(url);
-      console.log(res.data)
       updateState(res.data);
     } catch (error) {
       console.log(`couldn't fetch products`)

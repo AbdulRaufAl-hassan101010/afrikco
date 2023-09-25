@@ -1,3 +1,5 @@
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { styled } from 'styled-components';
 
@@ -8,7 +10,7 @@ const Styles = styled.nav`
   min-height: 6rem;
   display: flex;
   align-items: center;
-  z-index: 1000;
+  z-index: 100;
   margin-bottom: 1rem;
 
   .logo-icons {
@@ -28,6 +30,22 @@ const Styles = styled.nav`
       font-size: 1.4rem;
       color: #757575;
       padding: 0 1rem;
+    }
+  }
+
+  .login {
+    position: relative;
+
+    &:hover ul {
+      display: block;
+    }
+    ul {
+      display: none;
+      position: absolute;
+      top: 2rem;
+      width: 100%;
+      padding: 1rem;
+      background-color: #fff;
     }
   }
 
@@ -78,6 +96,34 @@ const navbarTogglerHandler = (e) => {
 };
 
 const Navbar = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userData, setUserData] = useState({});
+
+  const loggOutHandler = async () => {
+    try {
+      await axios('/apis/users/logout');
+      setIsLoggedIn(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    (async () => {
+      setUserData({});
+      setIsLoggedIn(false);
+      
+      try {
+        const res = await axios('/apis/users/auth');
+        setUserData(res.data);
+        setIsLoggedIn(true);
+      } catch (error) {
+        setIsLoggedIn(false);
+        console.log(error);
+      }
+    })();
+  }, []);
+
   return (
     <Styles>
       <div className="container flex jc-sb align-items-center">
@@ -127,7 +173,18 @@ const Navbar = () => {
             </Link>
           </li>
           <li>
-            <Link to="/login">Login</Link>
+            <Link to="/login" className="login">
+              {isLoggedIn ? (
+                <>
+                  {userData.username}
+                  <ul className="sub-links">
+                    <li onClick={loggOutHandler}>logout</li>
+                  </ul>
+                </>
+              ) : (
+                'Login'
+              )}
+            </Link>
           </li>
         </ul>
       </div>

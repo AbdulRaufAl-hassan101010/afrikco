@@ -21,14 +21,14 @@ const Styles = styled.div`
   }
 `;
 
-const Wrapper = ({ isButton, children }) => {
-  return isButton ? <button>{children}</button> : <Link>{children}</Link>;
+const Wrapper = ({ isButton, children, onClick }) => {
+  return isButton ? <button onClick={onClick}>{children}</button> : <Link>{children}</Link>;
 };
 
-const Button = ({ isButton = 'true', children, display, className }) => {
+const Button = ({ isButton = 'true', children, display, className, onClick }) => {
   return (
     <Styles className={className} display={display}>
-      <Wrapper isButton={isButton}>{children}</Wrapper>
+      <Wrapper isButton={isButton} onClick={onClick}>{children}</Wrapper>
     </Styles>
   );
 };
