@@ -1,8 +1,8 @@
-from flask import request, jsonify
-from server.models import Product
+from flask import request, jsonify, session
+from server.models import Product, Cart
 from server import db
 from server.apis.utils import serialize
-from sqlalchemy import desc, asc, or_
+from sqlalchemy import desc, asc
 
 def products_count():
     try:
@@ -46,8 +46,8 @@ def add_product():
 
 def get_products(id=None):
     try:
-        # Retrieve query parameters from the request URL
-        id = request.args.get('id', None, type=int)
+        # # Retrieve query parameters from the request URL
+        # id = request.args.get('id', None, type=int)
         order = request.args.get('order', 'desc')
         order_column = request.args.get('order_column', 'created_at')
         search = request.args.get('search', None)
@@ -90,6 +90,16 @@ def get_products(id=None):
         if id:
             serialized_category_data = serialize(products[0].category)         
             serialized_data[0]['category'] = serialized_category_data['name']
+
+            user_id = session.get('user_id')
+            in_cart = Cart.query.filter_by(product_id=id, user_id=user_id).first()
+
+            if in_cart is None:
+                serialized_data[0]['in_cart'] = 0
+            else:
+                 serialized_data[0]['in_cart'] = 1
+                 serialized_data[0]['in_cart_qty'] = in_cart.quantity
+
             return jsonify(serialized_data[0]), 200
 
         return jsonify(serialized_data), 200

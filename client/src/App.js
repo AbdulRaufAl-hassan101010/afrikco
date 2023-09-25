@@ -6,6 +6,7 @@ import Login from './pages/client/Login';
 
 // dashboard
 import DashboardHome from './pages/dashboard/Home'
+import Cart from './pages/client/Cart';
 
 
 const router = createBrowserRouter([
@@ -16,6 +17,10 @@ const router = createBrowserRouter([
   {
     path: '/products/:id',
     element: <Product />,
+  },
+  {
+    path: '/cart',
+    element: <Cart />,
   },
   {
     path: '/login',

@@ -6,7 +6,7 @@ const Styles = styled.div`
   margin-bottom: 1rem;
   a,
   button {
-    background-color: #dc3545;
+    background-color: ${(props) => (props.$bg ? props.$bg : '#dc3545')};
     border: none;
     padding: 1rem 1.6rem;
     cursor: pointer;
@@ -21,14 +21,48 @@ const Styles = styled.div`
   }
 `;
 
-const Wrapper = ({ isButton, children, onClick }) => {
-  return isButton ? <button onClick={onClick}>{children}</button> : <Link>{children}</Link>;
+const Wrapper = ({
+  isButton,
+  children,
+  onClick,
+  type,
+  disabled,
+  className,
+}) => {
+  return isButton ? (
+    <button
+      className={className}
+      type={type}
+      disabled={disabled}
+      onClick={onClick}
+    >
+      {children}
+    </button>
+  ) : (
+    <Link>{children}</Link>
+  );
 };
 
-const Button = ({ isButton = 'true', children, display, className, onClick }) => {
+const Button = ({
+  isButton = 'true',
+  children,
+  display,
+  className,
+  onClick,
+  type = 'button',
+  disabled = false,
+}) => {
   return (
-    <Styles className={className} display={display}>
-      <Wrapper isButton={isButton} onClick={onClick}>{children}</Wrapper>
+    <Styles display={display}>
+      <Wrapper
+        className={className}
+        isButton={isButton}
+        onClick={onClick}
+        disabled={disabled}
+        type={type}
+      >
+        {children}
+      </Wrapper>
     </Styles>
   );
 };

@@ -1,5 +1,5 @@
 from flask import request, jsonify, session
-from server.models import Cart
+from server.models import Cart, Product
 from server import db
 from server.apis.api_blueprint import apis_blueprint
 from server.middlewares import auth_admin, auth_required
@@ -54,15 +54,40 @@ def get_cart_entries():
 @auth_required
 def get_user_cart():
     try:
-        user_id=session.get('user_id')
+        user_id = session.get('user_id')
 
+        # Retrieve cart entries for the user
         cart_entries = Cart.query.filter_by(user_id=user_id).all()
 
-        serialized_cart_entries = serialize(cart_entries)
-        return jsonify(serialized_cart_entries), 200
+        # Create a list to store product info for each item in the cart
+        cart_info = []
+
+        # Get the product IDs from cart entries
+        product_ids = [cart_entry.product_id for cart_entry in cart_entries]
+
+        # Retrieve product details for the product IDs in the cart
+        products = Product.query.filter(Product.product_id.in_(product_ids)).all()
+
+        # Iterate through cart entries and merge product details
+        for cart_entry in cart_entries:
+            product_id = cart_entry.product_id
+            product = next((p for p in products if p.product_id == product_id), None)
+
+            if product:
+                cart_item_info = {
+                    'product_info': product.to_dict(),  # Use the to_dict method
+                    'quantity': cart_entry.quantity  # Include quantity from cart entry
+                }
+                cart_info.append(cart_item_info)
+
+        # Now, cart_info contains a list of dictionaries with product info and quantities    
+
+        return jsonify(cart_info), 200
     except Exception as e:
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
+
+
     
 
 

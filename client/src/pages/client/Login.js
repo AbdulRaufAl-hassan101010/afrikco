@@ -8,6 +8,7 @@ import appleSvg from '../../assets/svgs/apple.svg';
 import gmailSvg from '../../assets/svgs/gmail.svg';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
+import Card from '../../components/Card';
 
 const Styles = styled.main`
   display: flex;
@@ -44,20 +45,17 @@ const Styles = styled.main`
       }
     }
 
-    .svgs {
-      display: grid;
-      gap: 1rem;
-      justify-content: start;
-      grid-template-columns: repeat(3, 1fr);
-
-      .img {
-        background-color: #fff;
-        padding: 1rem 0.5rem;
-        img {
-          width: 100%;
-        }
-        height: 50px;
+    .svg {
+      img {
+        height: 4rem;
       }
+      display: grid;
+      background-color: #fff;
+      align-items: center;
+      justify-content: center;
+
+      height: 6rem;
+      gap: 1rem;
     }
   }
 `;
@@ -130,24 +128,13 @@ const Login = () => {
 
           <div className="other">
             <div className="divider">OR</div>
-
-            <div className="svgs">
-              <div className="img">
-                <Link to="/">
-                  <img src={facebookSvg} alt="" />
-                </Link>
-              </div>
-              <div className="img">
-                <Link to="/">
-                  <img src={appleSvg} alt="" />
-                </Link>
-              </div>
-              <div className="img">
-                <Link to="/">
+            <Link>
+              <Card className="svg">
+                <div>
                   <img src={gmailSvg} alt="" />
-                </Link>
-              </div>
-            </div>
+                </div>
+              </Card>
+            </Link>
           </div>
         </div>
       </Styles>

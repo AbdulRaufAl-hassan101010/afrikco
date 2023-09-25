@@ -163,12 +163,12 @@ const Navbar = () => {
             </Link>
           </li>
           <li>
-            <Link to="/">
+            <Link to="/favourites">
               <i className="fa-regular fa-heart fa-lg"></i>
             </Link>
           </li>
           <li>
-            <Link to="/">
+            <Link to="/cart">
               <i className="fa-solid fa-cart-shopping fa-lg"></i>
             </Link>
           </li>

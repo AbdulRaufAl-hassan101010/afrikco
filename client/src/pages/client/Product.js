@@ -90,7 +90,7 @@ const Product = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await axios(`/apis/products?id=${id}`);
+        const res = await axios(`/apis/products/${id}`);
         setProduct(res.data);
       } catch (error) {
         console.log(`couldn't featch products`);
@@ -114,7 +114,15 @@ const Product = () => {
     fetchComments();
   }, [id]);
 
-  // useEffect(() => console.log(selectedQuantity))
+  // GET PRODUCT BY ID
+  useEffect(() => {
+    if (product) {
+      if (product.in_cart === 1) {
+        setSelectedQuanity(product.in_cart_qty);
+      }
+    }
+  }, [id, product, product.in_cart, product.quantity]);
+
 
   const addToCartHandler = async () => {
     setMessage(null);
@@ -197,6 +205,7 @@ const Product = () => {
                   id=""
                   value={selectedQuantity}
                   onChange={(event) => setSelectedQuanity(event.target.value)}
+                  disabled={product.in_cart === 1 ? true : false}
                 >
                   {generateNumbers(product.quantity).map((quantity) => (
                     <option key={quantity * 3} value={quantity}>
@@ -207,8 +216,13 @@ const Product = () => {
               </div>
             </div>
             <div>
-              <Button isButton="true" onClick={addToCartHandler}>
-                Add to cart
+              <Button
+              className={product.in_cart === 1 ? 'bg-grey' : 'Add to cart'}
+                isButton="true"
+                onClick={addToCartHandler}
+                disabled={product.in_cart === 1 ? true : false}
+              >
+                {product.in_cart === 1 ? 'In cart' : 'Add to cart'}
               </Button>
             </div>
           </Card>

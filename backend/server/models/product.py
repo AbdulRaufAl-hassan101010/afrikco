@@ -33,5 +33,19 @@ class Product(db.Model):
         self.category_id = category_id
         self.image_url = image_url
 
+    def to_dict(self):
+        return {
+            'product_id': self.product_id,
+            'name': self.name,
+            'description': self.description,
+            'price': self.price,
+            'quantity': self.quantity,
+            'rating': self.rating,
+            'category_id': self.category_id,
+            'image_url': self.image_url,
+            'created_at': self.created_at.isoformat(),
+            'updated_at': self.updated_at.isoformat()
+        }
+
     def __repr__(self):
         return f'<Product {self.product_id}: {self.name}>'

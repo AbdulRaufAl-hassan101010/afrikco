@@ -88,6 +88,11 @@ fieldset {
   border: none
 }
 
+.bg-grey {
+  background-color: #f4f4f4 !important;
+  color: #1e1e1e !important
+}
+
 `;
 
 export default GlobalStyle;
