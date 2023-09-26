@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { styled } from 'styled-components';
+import Input from '../Input';
 
 const Styles = styled.nav`
   position: sticky;
@@ -33,20 +34,24 @@ const Styles = styled.nav`
     }
   }
 
-  .login {
+  li {
     position: relative;
+  }
+  li:hover > ul {
+    display: block;
+  }
+  li > ul {
+    display: none;
+    position: absolute;
+    top: 2rem;
+    right: 0;
+    width: 100%;
+    padding: 1rem;
+    background-color: #fff;
+  }
 
-    &:hover ul {
-      display: block;
-    }
-    ul {
-      display: none;
-      position: absolute;
-      top: 2rem;
-      width: 100%;
-      padding: 1rem;
-      background-color: #fff;
-    }
+  .search {
+    width: 40rem;
   }
 
   @media (max-width: 836px) {
@@ -98,6 +103,8 @@ const navbarTogglerHandler = (e) => {
 const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState({});
+  const [searchInput, setSearchInput] = useState('');
+  const [searchedData, setSearchedData] = useState([]);
 
   const loggOutHandler = async () => {
     try {
@@ -112,7 +119,7 @@ const Navbar = () => {
     (async () => {
       setUserData({});
       setIsLoggedIn(false);
-      
+
       try {
         const res = await axios('/apis/users/auth');
         setUserData(res.data);
@@ -123,6 +130,20 @@ const Navbar = () => {
       }
     })();
   }, []);
+
+  useEffect(() => {
+    const getSearchedData = async () => {
+      try {
+        const res = await axios(`/apis/products?search=${searchInput}`);
+        setSearchedData(res.data);
+      } catch (error) {
+        setIsLoggedIn(false);
+        console.log(error);
+      }
+    };
+
+    getSearchedData()
+  }, [searchInput]);
 
   return (
     <Styles>
@@ -161,11 +182,16 @@ const Navbar = () => {
             <Link to="/">
               <i className="fa-solid fa-magnifying-glass fa-lg"></i>
             </Link>
-          </li>
-          <li>
-            <Link to="/favourites">
-              <i className="fa-regular fa-heart fa-lg"></i>
-            </Link>
+            <ul className="sub-links search">
+              <li>
+                <Input placeholder="search" value={searchInput} update={setSearchInput}/>
+              </li>
+              {searchedData.map(({ name, product_id, category }) => (
+                <li className='mb-1'>
+                  <Link to={`/products/${product_id}`}>{name} in {category}</Link>
+                </li>
+              ))}
+            </ul>
           </li>
           <li>
             <Link to="/cart">
@@ -173,18 +199,16 @@ const Navbar = () => {
             </Link>
           </li>
           <li>
-            <Link to="/login" className="login">
-              {isLoggedIn ? (
-                <>
-                  {userData.username}
-                  <ul className="sub-links">
-                    <li onClick={loggOutHandler}>logout</li>
-                  </ul>
-                </>
-              ) : (
-                'Login'
-              )}
-            </Link>
+            {isLoggedIn ? (
+              <>
+                {userData.username}
+                <ul className="sub-links">
+                  <li onClick={loggOutHandler}>logout</li>
+                </ul>
+              </>
+            ) : (
+              <Link to="/login">login</Link>
+            )}
           </li>
         </ul>
       </div>

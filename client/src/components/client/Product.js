@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { styled } from 'styled-components';
+import Rating from '../Rating';
 
 const Styles = styled.article`
   /* background-color: #fff; */
@@ -26,31 +27,6 @@ const Styles = styled.article`
     overflow: hidden;
   }
 
-  .icons {
-    /* background-color: rgba(255, 255, 255, 0.5); */
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    padding: 1rem 2rem;
-    transform: translateY(100%);
-    transition: all 0.2s linear;
-
-    a {
-      display: flex;
-      align-items: center;
-      height: 5rem;
-      width: 5rem;
-      justify-content: center;
-      background-color: rgba(255, 255, 255, 0.8);
-      border-radius: 50%;
-
-      &:hover {
-        background-color: rgba(255, 255, 255, 1);
-      }
-    }
-  }
-
   p > a {
     color: #775757;
     font-weight: thin;
@@ -63,25 +39,14 @@ const Styles = styled.article`
 `;
 
 const Product = (props) => {
-  const { product_id, image_url, name, price } = props.data;
+  const { product_id, image_url, name, price, rating } = props.data;
   return (
     <Styles>
       <div className="img">
         <img loading="lazy" src={image_url} alt="" />
-        <div className="icons">
-          <ul className="flex jc-sb">
-            <li>
-              <Link to="/">
-                <i className="fa-regular fa-heart fa-lg"></i>
-              </Link>
-            </li>
-            <li>
-              <Link to="/">
-                <i className="fa-solid fa-cart-shopping fa-lg"></i>
-              </Link>
-            </li>
-          </ul>
-        </div>
+      </div>
+      <div>
+        <Rating rating={rating} />
       </div>
       <div className="body">
         <p>

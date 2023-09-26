@@ -63,9 +63,12 @@ def get_products(id=None):
 
         # Apply search filter if 'search_term' is provided
         if search is not None:
+            if search == '':
+                return jsonify([]), 200
+            
             # Use 'ilike' to perform a case-insensitive search on the 'name' column
             query = query.filter(Product.name.ilike(f"%{search}%"))
-            print(len(search), search)
+
 
          # Determine the sorting order based on 'order'
         if order == 'desc':

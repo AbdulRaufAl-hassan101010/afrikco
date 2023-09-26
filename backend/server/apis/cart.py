@@ -92,9 +92,9 @@ def get_user_cart():
 
 
 
-@apis_blueprint.route('/cart/<int:cart_id>', methods=['PUT'])
+@apis_blueprint.route('/carts/<int:product_id>', methods=['PUT'])
 @auth_required
-def update_cart_entry(cart_id):
+def update_cart_entry(product_id):
     data = request.get_json()
     quantity = data.get('quantity')
 
@@ -102,8 +102,7 @@ def update_cart_entry(cart_id):
         return jsonify({"error": "Missing quantity"}), 400
     
     user_id=session.get('user_id')
-
-    cart_entry = Cart.query.filter_by(cart_id=cart_id, user_id= user_id)
+    cart_entry = Cart.query.filter_by(product_id=product_id, user_id= user_id).first()
 
     if cart_entry is None:
         return jsonify({"error": "Cart entry not found"}), 404
@@ -118,10 +117,11 @@ def update_cart_entry(cart_id):
         return jsonify({"error": str(e)}), 500
 
 
-@apis_blueprint.route('/cart/<int:cart_id>', methods=['DELETE'])
+@apis_blueprint.route('/carts/<int:product_id>', methods=['DELETE'])
 @auth_required
-def delete_cart_entry(cart_id):
-    cart_entry = Cart.query.get(cart_id)
+def delete_cart_entry(product_id):
+    user_id=session.get('user_id')
+    cart_entry = Cart.query.filter_by(product_id=product_id, user_id= user_id).first()
 
     if cart_entry is None:
         return jsonify({"error": "Cart entry not found"}), 404

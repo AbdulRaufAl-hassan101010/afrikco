@@ -58,43 +58,21 @@ const Styles = styled.main`
   }
 `;
 
-const Login = () => {
+const Signup = () => {
   const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   const navigation = useNavigate();
-  const location = useLocation();
 
-  // Get the previous URL
-  const { previousUrl, prevQuantity } =
-    location.state !== null ? location.state : {};
-
-  useEffect(() => {
-    (async () => {
-      try {
-        await axios('apis/users/auth');
-        setIsLoggedIn(true);
-        isLoggedIn && navigation(previousUrl || '/');
-      } catch (error) {
-        console.log(error);
-      }
-    })();
-  }, [isLoggedIn, navigation, previousUrl]);
+ 
 
   const loginHandler = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('/apis/users/login', { email, password });
-
-      if (previousUrl) {
-        return navigation(previousUrl || '/', {
-          state: {
-            prevQuantity: prevQuantity,
-          },
-        });
-      }
-      return navigation('/');
+      await axios.post('/apis/users', { email, password });
+      return navigation('/login');
     } catch (error) {
       console.log('Invalid credentails', error);
     }
@@ -105,30 +83,37 @@ const Login = () => {
       <Styles>
         <div className="wrapper">
           <form action="">
-            <legend className="mb-1 text-center">Login</legend>
+            <legend className="mb-1 text-center">Signup</legend>
             <fieldset>
               <Input
-                placeholder="Username/email"
-                update={setEmail}
-                value={email}
+                placeholder="Username"
+                update={setUsername}
+                value={username}
               />
+              <Input placeholder="email" update={setEmail} value={email} />
               <Input
                 placeholder="password"
                 type="password"
                 update={setPassword}
                 value={password}
               />
+              <Input
+                placeholder="Confirm Password"
+                type="password"
+                update={setConfirmPassword}
+                value={confirmPassword}
+              />
               <Button display="block" isButton={'true'} onClick={loginHandler}>
-                Login
+                Signup
               </Button>
             </fieldset>
           </form>
 
           <div className="other">
             <div className="divider">OR</div>
-            <Link to="/signup">
+            <Link to="/login">
               <Card className="svg">
-                <div className="text-center">sign up</div>
+                <div className="text-center">Login</div>
               </Card>
             </Link>
           </div>
@@ -138,4 +123,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Signup;

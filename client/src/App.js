@@ -7,6 +7,7 @@ import Login from './pages/client/Login';
 // dashboard
 import DashboardHome from './pages/dashboard/Home'
 import Cart from './pages/client/Cart';
+import Signup from './pages/client/Signup';
 
 
 const router = createBrowserRouter([
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
   {
     path: '/login',
     element: <Login/>,
+  },
+  {
+    path: '/Signup',
+    element: <Signup/>,
   },
   {
     path: '/dashboard',
