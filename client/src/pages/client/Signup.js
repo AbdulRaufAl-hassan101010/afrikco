@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 import Navbar from '../../components/client/Navbar';
-import gmailSvg from '../../assets/svgs/gmail.svg';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Card from '../../components/Card';
+import Alert from '../../components/Alert';
 
 const Styles = styled.main`
   display: flex;
@@ -63,22 +63,52 @@ const Signup = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [message, setMessage] = useState(null);
 
   const navigation = useNavigate();
 
- 
+  const signupHandler = useCallback(
+    async (e) => {
+      e.preventDefault();
 
-  const loginHandler = async (e) => {
-    e.preventDefault();
-    try {
-      await axios.post('/apis/users', { email, password });
-      return navigation('/login');
-    } catch (error) {
-      console.log('Invalid credentails', error);
+      try {
+        if (username === '' || email === '' || password === '') {
+          setMessage({
+            message: 'Fields cannot be empty',
+            type: 'danger',
+            id: Math.random(100),
+          });
+          return;
+        }
+        if (password !== confirmPassword) {
+          setMessage({ message: 'Password does not match', type: 'danger' });
+          return;
+        }
+
+        await axios.post('/apis/users', { username, email, password });
+        return navigation('/users/success');
+      } catch (error) {
+        console.log('Invalid credentails', error);
+      }
+    },
+    [confirmPassword, email, password, username]
+  );
+
+  useEffect(() => {
+    if (message) {
+      const timer = setTimeout(() => setMessage(null),1000)
+
+      return () => {
+        clearTimeout(timer)
+      }
     }
-  };
+  }, [message]);
+
   return (
     <>
+      {/* alert */}
+      {message && <Alert message={message.message} type={message.type} />}
+
       <Navbar />
       <Styles>
         <div className="wrapper">
@@ -103,7 +133,7 @@ const Signup = () => {
                 update={setConfirmPassword}
                 value={confirmPassword}
               />
-              <Button display="block" isButton={'true'} onClick={loginHandler}>
+              <Button display="block" isButton={'true'} onClick={signupHandler}>
                 Signup
               </Button>
             </fieldset>

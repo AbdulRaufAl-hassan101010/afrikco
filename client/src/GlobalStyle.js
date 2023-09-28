@@ -65,6 +65,9 @@ img {
 .text-center {
   text-align: center;
 }
+.text-primary {
+  color: #dc3545;
+}
 .text-grey {
   color: #757575;
 }

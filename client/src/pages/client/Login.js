@@ -3,12 +3,11 @@ import { styled } from 'styled-components';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 import Navbar from '../../components/client/Navbar';
-import gmailSvg from '../../assets/svgs/gmail.svg';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import Card from '../../components/Card';
 
-const Styles = styled.main`
+const Styles = styled.main` 
   display: flex;
   flex-direction: column;
   justify-content: center;
