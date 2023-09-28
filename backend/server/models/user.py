@@ -13,6 +13,8 @@ class User(db.Model):
     password_hash = db.Column(db.String(255), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
+    verified = db.Column(db.Boolean, nullable=False, default=False)
+
     
     # Define the foreign key relationship to Role
     role_id = db.Column(db.Integer, db.ForeignKey('roles.role_id'), nullable=False)

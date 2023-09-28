@@ -1,5 +1,7 @@
 from server import db
 from datetime import datetime
+from sqlalchemy import event
+from server.models import User
 
 class Cart(db.Model):
     __tablename__ = 'carts'
@@ -18,6 +20,14 @@ class Cart(db.Model):
     __table_args__ = (
         db.UniqueConstraint('user_id', 'product_id', name='unique_cart_entry'),
     )
+
+    # Define a function to delete cart entries associated with a user before the user is deleted
+    def delete_user_cart_entries(target, connection, **kwargs):
+        user_id = target.user_id
+        Cart.query.filter_by(user_id=user_id).delete()
+
+    # Attach the event listener to the User model's 'before_delete' event
+    event.listen(User, 'before_delete', delete_user_cart_entries)
 
     def __init__(self, product_id, quantity, user_id):
         self.product_id = product_id

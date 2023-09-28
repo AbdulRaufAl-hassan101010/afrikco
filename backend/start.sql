@@ -1,6 +1,6 @@
 -- DROP DATABASE ghantrade;
 -- CREATE DATABASE ghantrade;
--- use ghantrade;
+use ghantrade;
 
 
 -- Start a transaction

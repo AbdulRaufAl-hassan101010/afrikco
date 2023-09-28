@@ -2,7 +2,7 @@
 from flask import session 
 from server.apis.api_blueprint import apis_blueprint
 from server.controllers.user import *
-from server.middlewares.auth_required import auth_required
+from server.middlewares import auth_required, auth_verify
 
 # Create a route to login a new user
 @apis_blueprint.route('users/login', methods=['POST'])
@@ -24,11 +24,22 @@ def get_users_route():
     return get_users()
 
 
-# verify auth
+# is looged in 
 @apis_blueprint.route('users/auth', methods=['GET'])
 @auth_required
-def verify_auth():
+def is_logged_in_route():
     return get_user(session.get('user_id'))
+
+@apis_blueprint.route('users/verify', methods=['GET'])
+@auth_verify
+def is_verified_route():
+    user_id =session.get('user_id')
+    return get_user(id=user_id)
+
+@apis_blueprint.route('users/verify/<string:token>', methods=['PUT'])
+def verify_user_route(token):
+    return verify_user(token=token)
+
 
 
 
