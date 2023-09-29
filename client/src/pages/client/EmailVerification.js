@@ -21,7 +21,7 @@ const Styles = styled.div`
   }
 `;
 
-const UserVerify = () => {
+const EmailVerification = () => {
   const [verified, setVerified] = useState(null);
 
   const { token } = useParams();
@@ -68,4 +68,4 @@ const UserVerify = () => {
   );
 };
 
-export default UserVerify;
+export default EmailVerification;

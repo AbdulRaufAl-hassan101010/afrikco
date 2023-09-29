@@ -1,22 +1,22 @@
-import axios from 'axios';
 import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { isLoggedInAsync } from './features/userSlice';
 
 const PrivateRoute = ({ children }) => {
+  const user = useSelector((state) => state.user);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    const verifyAuth = async () => {
-      try {
-        const res = await axios('/apis/user/auth');
-        const data = await res.data;
-        if (!data) throw new Error('UNAUTHORIZED');
-      } catch (error) {
-        navigate('/login');
-      }
-    };
-    verifyAuth();
-  }, []);
+    dispatch(isLoggedInAsync());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (user && !user.verified) {
+      navigate('/users/verification/email');
+    }
+  }, [navigate, user]);
 
   return children;
 };

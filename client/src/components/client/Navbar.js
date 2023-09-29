@@ -1,8 +1,11 @@
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { styled } from 'styled-components';
 import Input from '../Input';
+
+import { useDispatch, useSelector } from 'react-redux';
+import { isLoggedInAsync, logoutAsync } from '../../features/userSlice';
 
 const Styles = styled.nav`
   position: sticky;
@@ -45,9 +48,14 @@ const Styles = styled.nav`
     position: absolute;
     top: 2rem;
     right: 0;
+    min-width: 10rem;
     width: 100%;
     padding: 1rem;
     background-color: #fff;
+
+    li {
+      cursor: pointer;
+    }
   }
 
   .search {
@@ -95,54 +103,37 @@ const Styles = styled.nav`
   }
 `;
 
-const navbarTogglerHandler = (e) => {
+const navbarTogglerHandler = () => {
   const $links = document.querySelector('.center-links');
   $links.classList.toggle('link-toggler');
 };
 
+const getSearchedData = async (searchInput, setSearchedData) => {
+  try {
+    const res = await axios(`/apis/products?search=${searchInput}`);
+    setSearchedData(res.data);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const Navbar = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userData, setUserData] = useState({});
   const [searchInput, setSearchInput] = useState('');
   const [searchedData, setSearchedData] = useState([]);
 
-  const loggOutHandler = async () => {
-    try {
-      await axios('/apis/users/logout');
-      setIsLoggedIn(false);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const dispatch = useDispatch();
+  const userData = useSelector((state) => state.user);
+
+  const loggOutHandler = useCallback(() => {
+    dispatch(logoutAsync());
+  }, [dispatch]);
 
   useEffect(() => {
-    (async () => {
-      setUserData({});
-      setIsLoggedIn(false);
-
-      try {
-        const res = await axios('/apis/users/auth');
-        setUserData(res.data);
-        setIsLoggedIn(true);
-      } catch (error) {
-        setIsLoggedIn(false);
-        console.log(error);
-      }
-    })();
-  }, []);
+    dispatch(isLoggedInAsync());
+  }, [dispatch]);
 
   useEffect(() => {
-    const getSearchedData = async () => {
-      try {
-        const res = await axios(`/apis/products?search=${searchInput}`);
-        setSearchedData(res.data);
-      } catch (error) {
-        setIsLoggedIn(false);
-        console.log(error);
-      }
-    };
-
-    getSearchedData()
+    getSearchedData(searchInput, setSearchedData);
   }, [searchInput]);
 
   return (
@@ -184,11 +175,17 @@ const Navbar = () => {
             </Link>
             <ul className="sub-links search">
               <li>
-                <Input placeholder="search" value={searchInput} update={setSearchInput}/>
+                <Input
+                  placeholder="search"
+                  value={searchInput}
+                  update={setSearchInput}
+                />
               </li>
               {searchedData.map(({ name, product_id, category }) => (
-                <li className='mb-1'>
-                  <Link to={`/products/${product_id}`}>{name} in {category}</Link>
+                <li className="mb-1">
+                  <Link to={`/products/${product_id}`}>
+                    {name} in {category}
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -199,7 +196,7 @@ const Navbar = () => {
             </Link>
           </li>
           <li>
-            {isLoggedIn ? (
+            {userData ? (
               <>
                 {userData.username}
                 <ul className="sub-links">

@@ -19,7 +19,7 @@ const Styles = styled.div`
   }
 `;
 
-const UserSuccess = () => {
+const SignupComplete = () => {
   return (
     <Styles>
       <div>
@@ -36,4 +36,4 @@ const UserSuccess = () => {
   );
 };
 
-export default UserSuccess;
+export default SignupComplete;

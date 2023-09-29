@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { styled } from 'styled-components';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 import Navbar from '../../components/client/Navbar';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import axios from 'axios';
 import Card from '../../components/Card';
 
-const Styles = styled.main` 
+import { useDispatch, useSelector } from 'react-redux';
+import { loginAsync } from '../../features/userSlice';
+
+const Styles = styled.main`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -60,9 +62,12 @@ const Styles = styled.main`
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const navigation = useNavigate();
+  const dispatch = useDispatch();
+  const isLoggedIn = useSelector((state) => state.user );
+
+  const navigate = useNavigate();
   const location = useLocation();
 
   // Get the previous URL
@@ -70,34 +75,30 @@ const Login = () => {
     location.state !== null ? location.state : {};
 
   useEffect(() => {
-    (async () => {
-      try {
-        await axios('apis/users/auth');
-        setIsLoggedIn(true);
-        isLoggedIn && navigation(previousUrl || '/');
-      } catch (error) {
-        console.log(error);
-      }
-    })();
-  }, [isLoggedIn, navigation, previousUrl]);
+    isLoggedIn && navigate('/');
+  }, [isLoggedIn, navigate])
+  
+
+
+  // useEffect(() => {
+  //   (async () => {
+  //     try {
+  //       await axios('apis/users/auth');
+  //       setIsLoggedIn(true);
+  //       isLoggedIn && navigation(previousUrl || '/');
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   })();
+  // }, [isLoggedIn, navigation, previousUrl]);
 
   const loginHandler = async (e) => {
     e.preventDefault();
-    try {
-      await axios.post('/apis/users/login', { email, password });
-
-      if (previousUrl) {
-        return navigation(previousUrl || '/', {
-          state: {
-            prevQuantity: prevQuantity,
-          },
-        });
-      }
-      return navigation('/');
-    } catch (error) {
-      console.log('Invalid credentails', error);
-    }
+    // Dispatch the loginAsync action with the form data
+    dispatch(loginAsync({ email, password }));
+    
   };
+
   return (
     <>
       <Navbar />

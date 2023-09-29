@@ -8,39 +8,56 @@ import Login from './pages/client/Login';
 import DashboardHome from './pages/dashboard/Home'
 import Cart from './pages/client/Cart';
 import Signup from './pages/client/Signup';
-import UserSuccess from './pages/client/UserSuccess';
-import UserVerify from './pages/client/UserVerify';
-
+import UserSuccess from './pages/client/SignupComplete';
+import EmailVerification from './pages/client/EmailVerification';
+import EmailVerificationMessage from './pages/client/EmailVerificationMessage';
+import PrivateRoute from './ProtectRoute';
 
 // routes
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Home />,
+    element: (
+      <PrivateRoute>
+        <Home />
+      </PrivateRoute>
+    ),
   },
   {
     path: '/products/:id',
-    element: <Product />,
+    element: (
+      <PrivateRoute>
+        <Product />
+      </PrivateRoute>
+    ),
   },
   {
     path: '/cart',
-    element: <Cart />,
+    element: (
+      <PrivateRoute>
+        <Cart />
+      </PrivateRoute>
+    ),
   },
   {
     path: '/login',
-    element: <Login/>,
+    element: <Login />,
   },
   {
     path: '/users/success',
-    element: <UserSuccess/>,
+    element: <UserSuccess />,
   },
   {
     path: '/users/verify/:token',
-    element: <UserVerify/>,
+    element: <EmailVerification />,
+  },
+  {
+    path: '/users/verification/email',
+    element: <EmailVerificationMessage />,
   },
   {
     path: '/Signup',
-    element: <Signup/>,
+    element: <Signup />,
   },
   {
     path: '/dashboard',
