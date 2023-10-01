@@ -2,7 +2,6 @@ from flask import request, jsonify
 from server.models import Role
 from server import db
 from server.apis.utils import serialize
-from server.utils import connect_to_database
 
 def add_role():
     try:
@@ -13,7 +12,6 @@ def add_role():
         # validate and refine data
         # save to database
         role = Role(name=name)
-        db = connect_to_database()
         db.session.add(role)
         db.session.commit()
 
@@ -27,7 +25,6 @@ def add_role():
 
 def get_roles(id=None):
     try:
-        db = connect_to_database()
         if id is not None:
             # Retrieve a specific role by ID
             role = Role.query.get(id)
@@ -69,7 +66,6 @@ def update_role(id):
             role.name = new_name
 
             # Commit the changes to the database
-            db = connect_to_database()
             db.session.commit()
 
             # Serialize and return the updated role

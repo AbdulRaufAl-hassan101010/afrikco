@@ -12,6 +12,7 @@ import PrivateRoute from './ProtectRoute';
 // dashboard
 import DashboardHome from './pages/dashboard/Home';
 import PasswordReset from './pages/PasswordReset';
+import ChangePassword from './pages/ChangePassword';
 
 // routes
 const router = createBrowserRouter([
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
   {
     path: '/password-reset',
     element: <PasswordReset />,
+  },
+  {
+    path: '/password-reset/:token',
+    element: <ChangePassword />,
   },
   {
     path: '/users/success',

@@ -1,5 +1,9 @@
-from server import db
+class UnauthorizedError(Exception):
+    def __init__(self, error_dict={"error": "Unauthorized", "message":"Unauthorized"}):
+        self.error_dict = error_dict
+        super().__init__(self.error_dict)
 
-def connect_to_database():
-    # No need to manually create a new connection; SQLAlchemy will handle it
-    return db
+class NotFoundError(Exception):
+    def __init__(self, error_dict={"error": "Not Found", "message":"Not Found"}):
+        self.error_dict = error_dict
+        super().__init__(self.error_dict)

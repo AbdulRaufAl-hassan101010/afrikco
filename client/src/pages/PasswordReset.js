@@ -70,7 +70,7 @@ const PasswordReset = () => {
             <fieldset>
               <Input placeholder="email" value={email} update={setEmail} />
 
-              <Button display="block">Reset</Button>
+              <Button display="block" type='submit'>Reset</Button>
             </fieldset>
           </form>
         </Card>

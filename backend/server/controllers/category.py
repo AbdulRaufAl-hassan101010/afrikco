@@ -2,10 +2,7 @@ from flask import request, jsonify
 from server.models import Category
 from server import db
 from server.apis.utils import serialize
-from server.utils import connect_to_database
-
 def add_category():
-    print(12344)
     try:
         # get json data from client
         form_data = request.get_json()
@@ -14,7 +11,6 @@ def add_category():
         # validate and refine data
         # save to database
         category = Category(name=name)
-        db = connect_to_database()
         db.session.add(category)
         db.session.commit()
 
@@ -28,7 +24,6 @@ def add_category():
 
 def get_categories(id=None):
     try:
-        db = connect_to_database()
         if id is not None:
             # Retrieve a specific category by ID
             category = Category.query.get(id)
@@ -69,7 +64,6 @@ def update_category(id):
             category.name = new_name
 
             # Commit the changes to the database
-            db = connect_to_database()
             db.session.commit()
 
             # Serialize and return the updated category

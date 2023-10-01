@@ -2,7 +2,7 @@ from flask import request, jsonify, session
 from server import db, base_url
 from server.models import User  # Import the User model
 from server.apis.utils import serialize
-from server.controllers.token import generate_token, is_expired
+from server.controllers.token import generate_token, is_expired, remove_token_by_token
 from server.apis.send_mail import send_email
 
 
@@ -21,10 +21,10 @@ def login_user():
 
         if user is None or user.check_password(password) is False:
             return jsonify({"error": "Invalid credentials"}), 400
-        
+
         serialized_data = serialize(user)
 
-        # create session 
+        # create session
         session["user_id"] = serialized_data["user_id"]
         session["role_id"] = serialized_data["role_id"]
         session["username"] = serialized_data["username"]
@@ -34,12 +34,11 @@ def login_user():
         # delete password data
         del serialized_data["password_hash"]
         del serialized_data["role_id"]
-        
+
         return jsonify(serialized_data), 200
     except Exception as e:
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
-
 
 
 # Create a route to create a new user
@@ -53,7 +52,8 @@ def create_user():
         if not (username and email and password):
             return jsonify({"error": "Missing data"}), 400
 
-        user = User(username=username, email=email, password=password, role_id=1)
+        user = User(username=username, email=email,
+                    password=password, role_id=1)
 
         db.session.add(user)
         db.session.commit()
@@ -61,13 +61,13 @@ def create_user():
         token = generate_token(user_id=user.user_id)
 
         # send mail
-        send_email(email_receiver=email, subject="Confirm Accout", body=f'Please confirm account if you want to use our services. {base_url}/users/verify/{token.token}')
+        send_email(email_receiver=email, subject="Confirm Accout",
+                   body=f'Please confirm account if you want to use our services. {base_url}/users/verify/{token.token}')
 
         return jsonify({"message": "User created successfully"}), 201
     except Exception as e:
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
-
 
 
 # Create a route to retrieve all users
@@ -82,13 +82,12 @@ def get_users():
     return jsonify(serialized_data), 200
 
 
-
 # Create a route to retrieve a specific user by ID
 def get_user(id):
     user = User.query.get(id)
     if user is None:
         return jsonify({"error": "User not found"}), 404
-    
+
     serialized_data = serialize(user)
     del serialized_data['password_hash']
     del serialized_data['role_id']
@@ -128,12 +127,13 @@ def update_user(id):
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
     
+
 # Create a route to retrieve a specific user by ID
 def get_user(id):
     user = User.query.get(id)
     if user is None:
         return jsonify({"error": "User not found"}), 404
-    
+
     serialized_data = serialize(user)
     del serialized_data['password_hash']
     del serialized_data['role_id']
@@ -146,14 +146,14 @@ def verify_user(token=None):
     try:
         if token is None:
             return jsonify({"error": "User not found"}), 404
-        
+
         # check if token exists and it hasn't expired
         token = is_expired(token=token)
-        
+
         user = User.query.get(token.user_id)
         if not user:
             return jsonify({"error": "User not found"}), 404
-        
+
         user.verified = True
 
         db.session.commit()
@@ -171,7 +171,7 @@ def verify_user(token=None):
     except Exception as e:
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
-    
+
 
 # reset password
 def password_reset():
@@ -183,16 +183,39 @@ def password_reset():
 
         if user is None:
             return jsonify({'error': {'message': 'email does not exist'}}), 404
-        
+
         token = generate_token(user_id=user.user_id)
 
         # send email
-        send_email(email_receiver=email, subject="Password reset", body=f'Link on the link to change your password. {base_url}/users/password-reset/{token.token}')
-        
+        send_email(email_receiver=email, subject="Password reset",
+                   body=f'Link on the link to change your password. {base_url}/password-reset/{token.token}. Token will expire in 15 mins')
+
         return jsonify({}), 200
     except Exception as error:
-        print(error)
-        return None
+        print("Internal Server Error:", error)  # Handle other exceptions
+        return jsonify({"error": "Internal Server Error"}), 500
+
+# change password
+def set_password_by_token(token):
+    data = request.get_json()
+    password = data.get('password')
+
+    try:
+        token = is_expired(token=token)
+
+        user = User.query.get(token.user_id)
+        user.password_hash = user.set_password(password)
+
+        # update user password in database
+        db.session.commit()
+
+        remove_token_by_token(token=token.token)
+
+        return jsonify({}), 200
+    except Exception as error:
+        print("Internal Server Error:", error)  # Handle other exceptions
+        return jsonify({"error": "Internal Server Error"}), 500
+
 
 # Create a route to logout user
 def logout():

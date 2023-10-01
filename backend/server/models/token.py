@@ -23,7 +23,6 @@ class Token(db.Model):
         Returns True if the token has expired, False otherwise.
         """
         current_time = datetime.utcnow()
-        print(current_time >= self.expire_at)
         return current_time >= self.expire_at
 
     def __repr__(self):

@@ -2,10 +2,10 @@ from server.apis.api_blueprint import apis_blueprint
 from server.controllers.token import *
 
 
-@apis_blueprint.route('/tokens', methods=['POST'])
-def create_token_route():
-    return create_token()
-
+# create route to get token
+@apis_blueprint.route('/tokens/<string:token>', methods=['GET'])
+def get_token_route(token):
+    return get_token(token)
 
 # Delete a specific token by ID
 @apis_blueprint.route('/tokens/<int:token_id>', methods=['DELETE'])
