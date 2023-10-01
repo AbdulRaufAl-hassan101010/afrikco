@@ -46,7 +46,7 @@ const Styles = styled.nav`
   li > ul {
     display: none;
     position: absolute;
-    top: 2rem;
+    top: 1.5;
     right: 0;
     min-width: 10rem;
     width: 100%;
@@ -117,7 +117,7 @@ const getSearchedData = async (searchInput, setSearchedData) => {
   }
 };
 
-const Navbar = () => {
+const Navbar = ({ checkAuth = true }) => {
   const [searchInput, setSearchInput] = useState('');
   const [searchedData, setSearchedData] = useState([]);
 
@@ -129,8 +129,10 @@ const Navbar = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    dispatch(isLoggedInAsync());
-  }, [dispatch]);
+    if (checkAuth) {
+      dispatch(isLoggedInAsync());
+    }
+  }, [checkAuth, dispatch]);
 
   useEffect(() => {
     getSearchedData(searchInput, setSearchedData);

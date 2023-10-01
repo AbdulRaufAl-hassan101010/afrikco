@@ -1,17 +1,17 @@
 import { createBrowserRouter } from 'react-router-dom';
 import Home from './pages/client/Home';
 import Product from './pages/client/Product';
-import Login from './pages/client/Login';
-
-
-// dashboard
-import DashboardHome from './pages/dashboard/Home'
+import Login from './pages/Login';
 import Cart from './pages/client/Cart';
 import Signup from './pages/client/Signup';
 import UserSuccess from './pages/client/SignupComplete';
 import EmailVerification from './pages/client/EmailVerification';
 import EmailVerificationMessage from './pages/client/EmailVerificationMessage';
 import PrivateRoute from './ProtectRoute';
+
+// dashboard
+import DashboardHome from './pages/dashboard/Home';
+import PasswordReset from './pages/PasswordReset';
 
 // routes
 const router = createBrowserRouter([
@@ -42,6 +42,10 @@ const router = createBrowserRouter([
   {
     path: '/login',
     element: <Login />,
+  },
+  {
+    path: '/password-reset',
+    element: <PasswordReset />,
   },
   {
     path: '/users/success',

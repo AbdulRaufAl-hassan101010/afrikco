@@ -1,8 +1,10 @@
 from flask import request, jsonify, session
-from server import db
+from server import db, base_url
 from server.models import User  # Import the User model
 from server.apis.utils import serialize
 from server.controllers.token import generate_token, is_expired
+from server.apis.send_mail import send_email
+
 
 # Create a route to login a new user
 def login_user():
@@ -59,8 +61,7 @@ def create_user():
         token = generate_token(user_id=user.user_id)
 
         # send mail
-        from server.apis.send_mail import send_email
-        send_email(email_receiver=email, subject="Confirm Accout", body=f'Please confirm account if you want to use our services. http://localhost:3000/users/verify/{token.token}')
+        send_email(email_receiver=email, subject="Confirm Accout", body=f'Please confirm account if you want to use our services. {base_url}/users/verify/{token.token}')
 
         return jsonify({"message": "User created successfully"}), 201
     except Exception as e:
@@ -170,6 +171,28 @@ def verify_user(token=None):
     except Exception as e:
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
+    
+
+# reset password
+def password_reset():
+    data = request.get_json()
+    email = data.get('email')
+
+    try:
+        user = User.query.filter_by(email=email).first()
+
+        if user is None:
+            return jsonify({'error': {'message': 'email does not exist'}}), 404
+        
+        token = generate_token(user_id=user.user_id)
+
+        # send email
+        send_email(email_receiver=email, subject="Password reset", body=f'Link on the link to change your password. {base_url}/users/password-reset/{token.token}')
+        
+        return jsonify({}), 200
+    except Exception as error:
+        print(error)
+        return None
 
 # Create a route to logout user
 def logout():

@@ -34,6 +34,19 @@ export const isLoggedInAsync = createAsyncThunk('user/auth', async () => {
   }
 });
 
+export const passwordResetAsync = createAsyncThunk(
+  'user/password-reset',
+  async (email) => {
+    try {
+      await axios.post(`/apis/users/password-reset`, {email});
+      return true
+    } catch (error) {
+      return error.response.data
+    }
+  }
+);
+
+
 export const userSlice = createSlice({
   name: 'user',
   initialState: null,

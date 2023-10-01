@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { styled } from 'styled-components';
-import Input from '../../components/Input';
-import Button from '../../components/Button';
-import Navbar from '../../components/client/Navbar';
+import Input from '../components/Input';
+import Button from '../components/Button';
+import Navbar from '../components/client/Navbar';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import Card from '../../components/Card';
+import Card from '../components/Card';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { loginAsync } from '../../features/userSlice';
+import { loginAsync } from '../features/userSlice';
 
 const Styles = styled.main`
   display: flex;
@@ -65,39 +65,37 @@ const Login = () => {
   // const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const dispatch = useDispatch();
-  const isLoggedIn = useSelector((state) => state.user );
+  const isLoggedIn = useSelector((state) => state.user);
 
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Get the previous URL
-  const { previousUrl, prevQuantity } =
-    location.state !== null ? location.state : {};
-
   useEffect(() => {
-    isLoggedIn && navigate('/');
-  }, [isLoggedIn, navigate])
-  
+    // Get the previous URL
+    const { previousUrl, prevQuantity } =
+      location.state !== null ? location.state : {};
 
+    if (isLoggedIn) {
+      if (prevQuantity || prevQuantity) {
+        return navigate(previousUrl, {
+          state: {
+            prevQuantity,
+          },
+        });
+      }
 
-  // useEffect(() => {
-  //   (async () => {
-  //     try {
-  //       await axios('apis/users/auth');
-  //       setIsLoggedIn(true);
-  //       isLoggedIn && navigation(previousUrl || '/');
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   })();
-  // }, [isLoggedIn, navigation, previousUrl]);
+      return navigate('/');
+    }
+  }, [isLoggedIn, location.state, navigate]);
 
-  const loginHandler = async (e) => {
-    e.preventDefault();
-    // Dispatch the loginAsync action with the form data
-    dispatch(loginAsync({ email, password }));
-    
-  };
+  const loginHandler = useCallback(
+    async (e) => {
+      e.preventDefault();
+      // Dispatch the loginAsync action with the form data
+      dispatch(loginAsync({ email, password }));
+    },
+    [dispatch, email, password]
+  );
 
   return (
     <>
@@ -122,6 +120,14 @@ const Login = () => {
                 Login
               </Button>
             </fieldset>
+
+            <small>
+              Forgotten password?{' '}
+              <Link to="/password-reset" className="text-primary">
+                {' '}
+                click
+              </Link>
+            </small>
           </form>
 
           <div className="other">

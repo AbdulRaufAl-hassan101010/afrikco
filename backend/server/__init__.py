@@ -9,6 +9,14 @@ DB_PASSWORD = environ.get("DB_PASSWORD")
 DB_NAME = environ.get("DB_NAME")
 DB_HOST = environ.get("DB_HOST")
 SECRET = environ.get("SECRET")
+ENVIRONMENT = environ.get("NODE_ENV", "development")
+
+# Define the base URL for both development and production
+if ENVIRONMENT == "production":
+    base_url = "https://production-domain.com"  # Change this to your production domain
+else:
+    base_url = "http://localhost:3000"  # Default to development domain
+
 
 app = Flask(__name__, static_folder="../../client/build", static_url_path="")
 db = SQLAlchemy()

@@ -91,7 +91,7 @@ const Signup = () => {
         console.log('Invalid credentails', error);
       }
     },
-    [confirmPassword, email, password, username]
+    [confirmPassword, email, navigation, password, username]
   );
 
   useEffect(() => {

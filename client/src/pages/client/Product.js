@@ -159,8 +159,6 @@ const Product = () => {
           type: 'danger',
         });
       }
-
-      console.log(error);
     }
   };
 
