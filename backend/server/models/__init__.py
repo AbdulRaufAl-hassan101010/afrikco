@@ -6,5 +6,6 @@ from .comment import *
 from .rating import *
 from .order_status import *
 from .order import *
+from .order_products import *
 from .cart import *
 from .token import *

@@ -13,9 +13,6 @@ class Product(db.Model):
     rating = db.Column(db.Integer, nullable=False, default=0)
     category_id = db.Column(db.Integer, db.ForeignKey('categories.cat_id'), nullable=False)
 
-    # Define a relationship to access the Order model
-    orders = db.relationship('Order', back_populates='product')
-
     # Define a relationship to access the Category model
     category = db.relationship('Category', backref=db.backref('products', lazy=True))
 
