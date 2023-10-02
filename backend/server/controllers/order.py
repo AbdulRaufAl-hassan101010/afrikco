@@ -71,16 +71,21 @@ def add_order():
 def get_orders(order_id):
     try:
         if order_id is None:
-            raise NotFoundError({"error": "Not found", "message": 'order not found'})
+            raise ValueError({"error": "Expect order_id", "message": 'order id required'})
         
         order = Order.query.get(order_id)
 
         if order is None:
             raise NotFoundError({"error": "Not found", "message": 'order not found'})
         
-        return order
+        serialized_data = serialize(order)
+        return jsonify(serialized_data), 200
+    except NotFoundError as e:
+        return jsonify(e), 404
+    except ValueError as e:
+        return jsonify(e), 400
     except Exception as e:
-        pass
+        return jsonify(str(e))
 
 
 def update_orders(order_id):

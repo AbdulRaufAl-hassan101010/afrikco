@@ -54,7 +54,11 @@ const router = createBrowserRouter([
   },
   {
     path: '/users/success',
-    element: <UserSuccess />,
+    element: (
+      <PrivateRoute>
+        <UserSuccess />
+      </PrivateRoute>
+    ),
   },
   {
     path: '/users/verify/:token',
@@ -62,7 +66,11 @@ const router = createBrowserRouter([
   },
   {
     path: '/users/verification/email',
-    element: <EmailVerificationMessage />,
+    element: (
+      <PrivateRoute>
+        <EmailVerificationMessage />
+      </PrivateRoute>
+    ),
   },
   {
     path: '/Signup',

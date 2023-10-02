@@ -11,7 +11,7 @@ class Order(db.Model):
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
 
     # Define a relationship to OrderProducts
-    # orders = db.relationship('OrderProducts', backref='order', lazy=True)
+    orders = db.relationship('OrderProducts', backref='order', lazy=True)
    
 
     def __init__(self, order_id, user_id, totals=0, order_status_id=1):
