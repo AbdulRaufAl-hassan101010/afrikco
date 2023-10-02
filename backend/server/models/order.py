@@ -21,4 +21,4 @@ class Order(db.Model):
         self.order_status_id = order_status_id
         
     def __repr__(self):
-        return f'<Order {self.order_id}: Product {self.product_id}>'
+        return f'<Order {self.order_id}: User {self.user_id}>'

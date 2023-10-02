@@ -11,7 +11,10 @@ class OrderProducts(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
 
-    # product = db.relationship('Product', back_populates='order_products')
+     # Define a unique constraint on order_id and product_id
+    __table_args__ = (
+        db.UniqueConstraint('order_id', 'product_id', name='unique_order_entry'),
+    )
    
 
     def __init__(self, order_id, product_id, price, quantity):

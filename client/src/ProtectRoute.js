@@ -12,8 +12,7 @@ const PrivateRoute = ({ children }) => {
     dispatch(isLoggedInAsync());
   }, [dispatch]);
 
-  useEffect(() => {
-    
+  useEffect(() => {    
     if (user) {
       !user.verified && navigate('/users/verification/email');
     } else {

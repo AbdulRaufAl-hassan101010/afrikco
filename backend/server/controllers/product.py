@@ -47,7 +47,6 @@ def add_product():
 def get_products(id=None):
     try:
         # # Retrieve query parameters from the request URL
-        # id = request.args.get('id', None, type=int)
         order = request.args.get('order', 'desc')
         order_column = request.args.get('order_column', 'created_at')
         search = request.args.get('search', None)
