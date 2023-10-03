@@ -9,7 +9,7 @@ class Product(db.Model):
     description = db.Column(db.Text, nullable=False)
     image_url = db.Column(db.Text, nullable=False)
     price = db.Column(db.Float, nullable=False)
-    quantity = db.Column(db.Integer, nullable=False, default=0)
+    quantity = db.Column(db.Integer, nullable=False, default=1)
     rating = db.Column(db.Integer, nullable=False, default=0)
     category_id = db.Column(db.Integer, db.ForeignKey('categories.cat_id'), nullable=False)
 

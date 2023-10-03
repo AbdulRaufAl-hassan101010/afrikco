@@ -1,5 +1,7 @@
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { styled } from 'styled-components';
+import { logoutAsync } from '../../features/userSlice';
 
 const Styles = styled.nav`
   position: sticky;
@@ -78,6 +80,7 @@ const navbarTogglerHandler = (e) => {
 };
 
 const Navbar = () => {
+  const dispatch = useDispatch();
   return (
     <Styles>
       <div className="container flex jc-sb align-items-center">
@@ -102,10 +105,9 @@ const Navbar = () => {
               <i className="fa-regular fa-user fa-lg"></i> Rauf
             </Link>
           </li>
-          <li>
-            <Link to="/">
-              <i className="fa-solid fa-arrow-right-from-bracket fa-lg"></i> Logout
-            </Link>
+          <li onClick={() => dispatch(logoutAsync())}>
+            <i className="fa-solid fa-arrow-right-from-bracket fa-lg"></i>{' '}
+            Logout
           </li>
         </ul>
       </div>

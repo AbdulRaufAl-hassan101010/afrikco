@@ -1,23 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import Navbar from '../../components/dashboard/Navbar';
 import Card from '../../components/Card';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
+import Layout from './Layout';
 
 const Styles = styled.div`
-  main {
-    display: grid;
-    grid-template-columns: 2fr 10fr;
-    grid-gap: 2rem;
-    align-items: start;
-  }
-
   table {
     width: 100%;
-    /* border-collapse: collapse; */
     td,
     th {
       text-align: left;
@@ -31,8 +22,6 @@ const Styles = styled.div`
 `;
 
 const Home = () => {
-  const [productsConut, setProductsCount] = useState(0);
-  const [ordersCount, setOrdersCount] = useState(0);
   const [products, setProducts] = useState([]);
 
   const fetch = async (url, updateState) => {
@@ -44,52 +33,19 @@ const Home = () => {
     }
   };
 
-  // GET PRODUCTS COUNT
-  useEffect(() => {
-    fetch('/apis/products/count', setProductsCount);
-  }, []);
-
-  // GET Orders COUNT
-  useEffect(() => {
-    fetch('/apis/orders/count', setOrdersCount);
-  }, []);
-
   // GET PRODUCTS
   useEffect(() => {
     fetch(`/apis/products`, setProducts);
   }, []);
 
   return (
-    <Styles>
-      <Navbar />
-      <main className="container">
-        <Card>
-          <ul>
-            <li className="mb-1">
-              <div className="flex jc-sb">
-                <Link to="">Products</Link>
-                <span>{productsConut}</span>
-              </div>
-              <hr />
-            </li>
-            <li className="mb-1">
-              <div className="flex jc-sb">
-                <Link to="">Orders</Link>
-                <span>{ordersCount}</span>
-              </div>
-              <hr />
-            </li>
-            <li className="mb-1">
-              <Link to="">Completed Orders</Link>
-              <hr />
-            </li>
-          </ul>
-        </Card>
+    <Layout>
+      <Styles>
         <section>
           <Card className="mb-1 flex jc-sb align-items-center">
             <Input className="mb-0" />
-            <Button className="mb-0">
-              <i className="fa-solid fa-plus"></i> Add Product
+            <Button className="mb-0" to="/dashboard/products/add" isButton={false}>
+              <i className="fa-solid fa-plus"  ></i> Add Product
             </Button>
           </Card>
           <Card>
@@ -136,8 +92,8 @@ const Home = () => {
             </table>
           </Card>
         </section>
-      </main>
-    </Styles>
+      </Styles>
+    </Layout>
   );
 };
 

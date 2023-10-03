@@ -170,7 +170,7 @@ const Product = () => {
         <div className="top container">
           <div className="img">
             <div className="selected-img">
-              <img src={product.image} alt="" />
+              <img src={product.image_url} alt="" />
             </div>
             <div className="img-selector-wrapper">
               {product.images &&

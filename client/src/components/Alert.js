@@ -21,16 +21,18 @@ const Alert = ({ message, type }) => {
     const timer = setTimeout(() => {
       setVisible(false);
     }, 1000); // Set a timeout of 3000 milliseconds (3 seconds)
-    
 
     return () => {
       clearTimeout(timer); // Clear the timeout if the component unmounts
+      Array.from(document.querySelectorAll('alert')).forEach((el) => {
+        el.remove();
+      });
     };
   }, []);
 
   return visible ? (
     <Styles $type={type}>
-      <div >{message}</div>
+      <div>{message}</div>
     </Styles>
   ) : null;
 };

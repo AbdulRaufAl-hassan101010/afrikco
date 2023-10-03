@@ -34,6 +34,17 @@ export const isLoggedInAsync = createAsyncThunk('user/auth', async () => {
   }
 });
 
+
+// is logged in
+export const isLoggedInAsAdminAsync = createAsyncThunk('user/auth/is-admin', async () => {
+  try {
+    const response = await axios('/apis/users/auth/is-admin');
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+});
+
 export const passwordResetAsync = createAsyncThunk(
   'user/password-reset',
   async (email) => {
@@ -61,16 +72,21 @@ export const userSlice = createSlice({
       })
       .addCase(logoutAsync.fulfilled, () => {
         // Return null to reset the user state when logged out
-        return null;
+        return false;
       })
       .addCase(isLoggedInAsync.fulfilled, (state, action) => {
-        console.log(123);
-        // Return null to reset the user state when logged out
+        return { ...state, ...action.payload };
+      })
+      .addCase(isLoggedInAsAdminAsync.fulfilled, (state, action) => {
         return { ...state, ...action.payload };
       })
       .addCase(isLoggedInAsync.rejected, () => {
         // Return null to reset the user state when logged out
-        return null;
+        return false;
+      })
+      .addCase(isLoggedInAsAdminAsync.rejected, () => {
+        // Return null to reset the user state when logged out
+        return false;
       });
   },
 });

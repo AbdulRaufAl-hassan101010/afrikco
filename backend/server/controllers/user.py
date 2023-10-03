@@ -68,6 +68,22 @@ def create_user():
     except Exception as e:
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
+    
+
+# send user verification email
+def send_confirmation_mail():
+    try:
+        user_id = session.get('user_id')
+        user_email = session.get('email')
+        token = generate_token(user_id=user_id)
+
+        # send mail
+        send_email(email_receiver=user_email, subject="Confirm Accout",
+                   body=f'Please confirm account if you want to use our services. {base_url}/users/verify/{token.token}')
+
+        return jsonify({"message": "User created successfully"}), 201
+    except Exception as e:
+        pass
 
 
 # Create a route to retrieve all users

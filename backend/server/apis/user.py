@@ -26,6 +26,15 @@ def get_users_route():
 def is_logged_in_route():
     return get_user(session.get('user_id'))
 
+# is looged in 
+@apis_blueprint.route('/users/auth/is-admin', methods=['GET'])
+@auth
+def is_logged_as_admin_route():
+    if (session.get('role_id') != 2):
+        return jsonify({"error": "unauthorized"}), 401
+    return get_user(session.get('user_id'))
+
+# verify user email
 @apis_blueprint.route('/users/verify/<string:token>', methods=['PUT'])
 def verify_user_route(token):
     return verify_user(token=token)
@@ -53,10 +62,16 @@ def update_user_route(id):
 def password_reset_route():
     return password_reset()
 
-# Create a route to send email to user to reset password
+# Create a route verify token to make user set new password
 @apis_blueprint.route('/users/password-reset/<string:token>', methods=['POST'])
 def set_password_by_token_route(token):
     return set_password_by_token(token=token)
+
+
+# Create a route verify token to make user set new password
+@apis_blueprint.route('/users/mail/confirmation', methods=['POST'])
+def send_confirmation_mail_route():
+    return send_confirmation_mail()
 
 # Create a route to logout user
 @apis_blueprint.route("/users/logout", methods=["POST", "GET"])

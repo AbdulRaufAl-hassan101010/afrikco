@@ -34,6 +34,7 @@ START TRANSACTION;
         (3, 'user3', 'user3@example.com', 'password3_hash', 1, NOW(), NOW()),
         (4, 'user4', 'user4@example.com', 'password4_hash', 1, NOW(), NOW()),
         (5, 'user5', 'user5@example.com', 'password5_hash', 1, NOW(), NOW());
+        (6, 'admin', 'abdulraufalhassan101010@gmail.com', 'password5_hash', 2, NOW(), NOW());
 
 
 

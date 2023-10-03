@@ -28,6 +28,7 @@ const Wrapper = ({
   type,
   disabled,
   className,
+  to,
 }) => {
   return isButton ? (
     <button
@@ -39,7 +40,7 @@ const Wrapper = ({
       {children}
     </button>
   ) : (
-    <Link>{children}</Link>
+    <Link to={to}>{children}</Link>
   );
 };
 
@@ -51,6 +52,7 @@ const Button = ({
   onClick,
   type = 'button',
   disabled = false,
+  to,
 }) => {
   return (
     <Styles display={display}>
@@ -60,6 +62,7 @@ const Button = ({
         onClick={onClick}
         disabled={disabled}
         type={type}
+        to={to}
       >
         {children}
       </Wrapper>

@@ -8,12 +8,14 @@ import UserSuccess from './pages/client/SignupComplete';
 import EmailVerification from './pages/client/EmailVerification';
 import EmailVerificationMessage from './pages/client/EmailVerificationMessage';
 import PrivateRoute from './ProtectRoute';
+import PrivateAdminRoute from './ProtectAdminRoute';
 
 // dashboard
 import DashboardHome from './pages/dashboard/Home';
 import PasswordReset from './pages/PasswordReset';
 import ChangePassword from './pages/ChangePassword';
 import Orders from './pages/client/Orders';
+import AddProduct from './pages/dashboard/AddProduct';
 
 // routes
 const router = createBrowserRouter([
@@ -27,9 +29,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/products/:id',
-    element: (
-        <Product />
-    ),
+    element: <Product />,
   },
   {
     path: '/cart',
@@ -85,7 +85,19 @@ const router = createBrowserRouter([
   },
   {
     path: '/dashboard',
-    element: <DashboardHome />,
+    element: (
+      <PrivateAdminRoute>
+        <DashboardHome />
+      </PrivateAdminRoute>
+    ),
+  },
+  {
+    path: '/dashboard/products/add',
+    element: (
+      <PrivateAdminRoute>
+        <AddProduct />
+      </PrivateAdminRoute>
+    ),
   },
 ]);
 
