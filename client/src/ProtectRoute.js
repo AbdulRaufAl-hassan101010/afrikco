@@ -15,8 +15,6 @@ const PrivateRoute = ({ children }) => {
   useEffect(() => {    
     if (user) {
       !user.verified && navigate('/users/verification/email');
-    } else {
-      navigate('/');
     }
   }, [navigate, user]);
 

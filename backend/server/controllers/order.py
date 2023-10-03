@@ -7,6 +7,7 @@ import uuid
 import sqlalchemy.exc
 import pymysql.err
 from sqlalchemy import desc, asc
+from server.apis.cart import delete_user_cart
 
 
 def add_order():
@@ -43,7 +44,6 @@ def add_order():
                     price= product.price,
                     quantity= item['quantity']
                 )
-                print(order_product)
             else:
                 raise ValueError("Invalid data format for an order product. attribute can be product_id, price, quantity.")
             
@@ -59,6 +59,8 @@ def add_order():
         # ADD ORDER TO VALID LIST
         order = Order(order_id= order_id, user_id=user_id, totals=totals)
         valid_order_products.insert(0, order)
+
+        delete_user_cart()
 
         db.session.add_all(valid_order_products)
         db.session.commit()
@@ -223,7 +225,18 @@ def get_user_orders():
             return [], 200
             
         
+
         serialized_data = serialize(orders)
+        for index, order in enumerate(orders):
+            serialized_orders = serialize(order.orders)
+            serialized_data[index]["orders"] = serialized_orders
+            serialized_data[index]["order_status"] = order.order_status.name
+            
+            for product_index, product in enumerate(order.orders):
+                serialized_product = serialize(product.product)
+                serialized_data[index]["orders"][product_index]['name'] = serialized_product['name']
+                serialized_data[index]["orders"][product_index]['image_url'] = serialized_product['image_url']
+            
 
         return jsonify(serialized_data), 200
     except Exception as e:

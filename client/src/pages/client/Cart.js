@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Navbar from '../../components/client/Navbar';
 import axios from 'axios';
@@ -43,7 +43,8 @@ const Quantity = ({ quantity, product, setCart }) => {
         await axios.put(`/apis/carts/${product_id}`, {
           quantity: selectedQuantity,
         });
-        await fetchCartProducts(setCart);
+
+        fetchCartProducts(setCart);
       } catch (error) {
         console.log(error);
         console.log(`couldn't featch products`);
@@ -79,29 +80,46 @@ const Cart = () => {
   const [itemsCount, setItemsCount] = useState(0);
   const [grandTotal, setGrandTotal] = useState(0);
 
-  // GET CART PRODUCTS
-  useEffect(() => {
-    fetchCartProducts(setCart);
+  const checkoutHandler = useCallback(async (cartItems) => {
+    try {
+      // convert cart data to order data
+      const order_data = cartItems.map(({ product_info, quantity }) => ({
+        product_id: product_info.product_id,
+        quantity,
+        price: product_info.price,
+      }));
+      await axios.post('/apis/orders', order_data);
+      setCart(null);
+    } catch (error) {
+      console.log(error);
+    }
   }, []);
 
   const removeProductFromCartHandler = async (product_id) => {
     try {
       await axios.delete(`/apis/carts/${product_id}`);
-      await fetchCartProducts(setCart);
+      fetchCartProducts(setCart);
     } catch (error) {
       console.log(error);
       console.log(`couldn't featch products`);
     }
   };
 
+  // GET CART PRODUCTS
+  useEffect(() => {
+    fetchCartProducts(setCart);
+  }, []);
+
   useEffect(() => {
     let items = 0;
     let total = 0;
-    cart.map(({ quantity, product_info }) => {
-      const { price } = product_info;
-      items += quantity;
-      total += price * quantity;
-    });
+    if (cart !== null) {
+      cart.forEach(({ quantity, product_info }) => {
+        const { price } = product_info;
+        items += quantity;
+        total += price * quantity;
+      });
+    }
 
     setItemsCount(items);
     setGrandTotal(total.toFixed(2));
@@ -111,67 +129,91 @@ const Cart = () => {
     <>
       <Navbar />
       <Styles className="container">
-        <div className="grid">
+        {cart === null ? (
           <div>
-            <h1 className="mb-1">Cart ({cart.length})</h1>
-            {cart.map((product, index) => {
-              const { image_url, name, price, product_id } =
-                product.product_info;
-              return (
-                <Card className="mb-1" key={index}>
-                  <div className="cart">
-                    <div>
-                      <img src={image_url} alt={name} />
-                    </div>
-                    <div>
-                      <div className="flex jc-sb">
-                        <Link to={`/products/${product_id}`}>{name}</Link>
-                        <Button
-                          isButton="true"
-                          onClick={removeProductFromCartHandler.bind(
-                            this,
-                            product_id
-                          )}
-                        >
-                          x
-                        </Button>
+            <h1 className="mb-1">
+              Your order is being process, we will update you in your email
+            </h1>
+            <p>
+              Check your orders here{' '}
+              <Link to="/orders" className="text-primary">
+                orders
+              </Link>
+            </p>
+          </div>
+        ) : cart.length < 1 ? (
+          <div>
+            <h1>No products found in cart</h1>
+          </div>
+        ) : (
+          <div className="grid">
+            <div>
+              <h1 className="mb-1">Cart ({cart.length})</h1>
+              {cart.map((product, index) => {
+                const { image_url, name, price, product_id } =
+                  product.product_info;
+                return (
+                  <Card className="mb-1" key={index}>
+                    <div className="cart">
+                      <div>
+                        <img src={image_url} alt={name} />
                       </div>
-
-                      {/* qty */}
-                      <Quantity
-                        product={product.product_info}
-                        quantity={product.quantity}
-                        setCart={setCart}
-                      />
-
-                      {/* price */}
-                      <div className="flex jc-sb">
-                        <div>price: &#x20B5;{price}</div>
-                        <div>
-                          Total: {(price * product.quantity).toFixed(2)}
+                      <div>
+                        <div className="flex jc-sb">
+                          <Link to={`/products/${product_id}`}>{name}</Link>
+                          <Button
+                            isButton="true"
+                            onClick={removeProductFromCartHandler.bind(
+                              this,
+                              product_id
+                            )}
+                          >
+                            x
+                          </Button>
                         </div>
-                        <div></div>
+
+                        {/* qty */}
+                        <Quantity
+                          product={product.product_info}
+                          quantity={product.quantity}
+                          setCart={setCart}
+                        />
+
+                        {/* price */}
+                        <div className="flex jc-sb">
+                          <div>price: &#x20B5;{price}</div>
+                          <div>
+                            Total: {(price * product.quantity).toFixed(2)}
+                          </div>
+                          <div></div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </Card>
-              );
-            })}
-          </div>
+                  </Card>
+                );
+              })}
+            </div>
 
-          <div>
-            <h1 className="mb-1">Grand Total</h1>
-            <Card>
-              <div className="mb-1">items x {itemsCount}</div>
-              <div className="mb-1">
-                <b>Totals:</b> {grandTotal}
-              </div>
-              <div>
-                <Button display={'block'}>Checkout</Button>
-              </div>
-            </Card>
+            <div>
+              <h1 className="mb-1">Grand Total</h1>
+              <Card>
+                <div className="mb-1">items x {itemsCount}</div>
+                <div className="mb-1">
+                  <b>Totals:</b> {grandTotal}
+                </div>
+                <div>
+                  <Button
+                    display={'block'}
+                    type="button"
+                    onClick={checkoutHandler.bind(this, cart)}
+                  >
+                    Checkout
+                  </Button>
+                </div>
+              </Card>
+            </div>
           </div>
-        </div>
+        )}
       </Styles>
     </>
   );

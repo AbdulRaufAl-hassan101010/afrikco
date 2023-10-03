@@ -13,6 +13,7 @@ import PrivateRoute from './ProtectRoute';
 import DashboardHome from './pages/dashboard/Home';
 import PasswordReset from './pages/PasswordReset';
 import ChangePassword from './pages/ChangePassword';
+import Orders from './pages/client/Orders';
 
 // routes
 const router = createBrowserRouter([
@@ -27,9 +28,7 @@ const router = createBrowserRouter([
   {
     path: '/products/:id',
     element: (
-      <PrivateRoute>
         <Product />
-      </PrivateRoute>
     ),
   },
   {
@@ -69,6 +68,14 @@ const router = createBrowserRouter([
     element: (
       <PrivateRoute>
         <EmailVerificationMessage />
+      </PrivateRoute>
+    ),
+  },
+  {
+    path: '/orders',
+    element: (
+      <PrivateRoute>
+        <Orders />
       </PrivateRoute>
     ),
   },

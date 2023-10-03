@@ -13,4 +13,4 @@ class OrderStatus(db.Model):
         self.name = name
 
     def __repr__(self):
-        return f'<Category {self.cat_id}: {self.name}>'
+        return f'<Category {self.order_status_id}: {self.name}>'

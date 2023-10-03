@@ -1,9 +1,11 @@
 from server.apis.api_blueprint import apis_blueprint
 from server.controllers.category import *
+from server.middlewares import auth_admin
 
 
 # Define the route for adding a category
 @apis_blueprint.route('categories', methods=['POST'])
+@auth_admin
 def add_category_route():
     return add_category()
 
@@ -16,5 +18,6 @@ def get_categories_route(id=None):
 
 # Define the route for updating a category by id
 @apis_blueprint.route('categories/<int:id>', methods=['PUT'])
+@auth_admin
 def update_category_route(id):
     return update_category(id)

@@ -6,6 +6,7 @@ from server.middlewares import auth_admin, auth_required
 from server.apis.utils import serialize
 from server.controllers.product import get_product
 from sqlalchemy.exc import IntegrityError
+from server.utils import NotFoundError
 
 @apis_blueprint.route('/carts', methods=['POST'])
 @auth_required
@@ -133,3 +134,19 @@ def delete_cart_entry(product_id):
     except Exception as e:
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
+    
+def delete_user_cart():
+    user_id = session.get('user_id')
+    cart_entries = Cart.query.filter_by(user_id=user_id).all()
+
+    if not cart_entries:
+        raise NotFoundError({"error": "Cart entries not found"})
+
+    try:
+        for entry in cart_entries:
+            db.session.delete(entry)
+            
+        return {"message": "Cart entries deleted successfully"}
+    except Exception as e:
+        db.session.rollback()
+        raise e

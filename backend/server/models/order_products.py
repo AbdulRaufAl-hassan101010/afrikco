@@ -15,6 +15,9 @@ class OrderProducts(db.Model):
     __table_args__ = (
         db.UniqueConstraint('order_id', 'product_id', name='unique_order_entry'),
     )
+
+    # Define a relationship to OrderProducts
+    product = db.relationship('Product', backref='order_products', lazy=True)
    
 
     def __init__(self, order_id, product_id, price, quantity):
