@@ -1,10 +1,10 @@
-﻿# AfrikCo E-commerce Site
+﻿# Ghantrade E-commerce Site
 
-Welcome to AfrikCo, an open-source e-commerce site built with Python.
+Welcome to Ghantrade, an open-source e-commerce site built with Python.
 
 ## Overview
 
-AfrikCo is designed to provide a robust and flexible platform for online commerce. It includes features such as product listing, user authentication, cart management, and order processing.
+Ghantrade is designed to provide a robust and flexible platform for online commerce. It includes features such as product listing, user authentication, cart management, and order processing.
 
 ## Table of Contents
 
