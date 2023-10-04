@@ -45,4 +45,4 @@ Ghantrade is designed to provide a robust and flexible platform for online comme
 1. Clone the repository:
 
    ```bash
-   git clone git clone https://github.com/AbdulRaufAl-hassan101010/ghantrade.git
+   git clone https://github.com/AbdulRaufAl-hassan101010/ghantrade.git
