@@ -13,7 +13,7 @@ ENVIRONMENT = environ.get("NODE_ENV", "development")
 
 # Define the base URL for both development and production
 if ENVIRONMENT == "production":
-    base_url = "https://production-domain.com"  # Change this to your production domain
+    base_url = "https://ghantrade.onrender.com"  # Change this to your production domain
 else:
     base_url = "http://localhost:3000"  # Default to development domain
 
@@ -64,7 +64,7 @@ app.register_blueprint(apis_blueprint, url_prefix="/apis")
 @app.route('/dashboard/products/add')
 @app.route('/dashboard/orders')
 @app.route('/dashboard/users')
-def static_pages(id=None, token=None):
+def static_pages():
     return send_from_directory(app.static_folder, 'index.html')
 
 
