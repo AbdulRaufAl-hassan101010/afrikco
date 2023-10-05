@@ -1,4 +1,8 @@
 import { createBrowserRouter } from 'react-router-dom';
+import PrivateRoute from './ProtectRoute';
+import PrivateAdminRoute from './ProtectAdminRoute';
+
+// client
 import Home from './pages/client/Home';
 import Product from './pages/client/Product';
 import Login from './pages/Login';
@@ -7,15 +11,15 @@ import Signup from './pages/client/Signup';
 import UserSuccess from './pages/client/SignupComplete';
 import EmailVerification from './pages/client/EmailVerification';
 import EmailVerificationMessage from './pages/client/EmailVerificationMessage';
-import PrivateRoute from './ProtectRoute';
-import PrivateAdminRoute from './ProtectAdminRoute';
+import Orders from './pages/client/Orders';
 
 // dashboard
 import DashboardHome from './pages/dashboard/Home';
 import PasswordReset from './pages/PasswordReset';
 import ChangePassword from './pages/ChangePassword';
-import Orders from './pages/client/Orders';
 import AddProduct from './pages/dashboard/AddProduct';
+import DashboardOrders from './pages/dashboard/Orders';
+import Users from './pages/dashboard/Users';
 
 // routes
 const router = createBrowserRouter([
@@ -96,6 +100,22 @@ const router = createBrowserRouter([
     element: (
       <PrivateAdminRoute>
         <AddProduct />
+      </PrivateAdminRoute>
+    ),
+  },
+  {
+    path: '/dashboard/orders',
+    element: (
+      <PrivateAdminRoute>
+        <DashboardOrders />
+      </PrivateAdminRoute>
+    ),
+  },
+  {
+    path: '/dashboard/users',
+    element: (
+      <PrivateAdminRoute>
+        <Users />
       </PrivateAdminRoute>
     ),
   },

@@ -5,24 +5,13 @@ import axios from 'axios';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
 import Layout from './Layout';
+import Table from '../Table';
 
-const Styles = styled.div`
-  table {
-    width: 100%;
-    td,
-    th {
-      text-align: left;
-      padding: 0.5rem;
-    }
-
-    tbody > tr:nth-child(odd) {
-      background-color: #f4f4f4;
-    }
-  }
-`;
+const Styles = styled.div``;
 
 const Home = () => {
   const [products, setProducts] = useState([]);
+  const [search, setSearch] = useState();
 
   const fetch = async (url, updateState) => {
     try {
@@ -38,18 +27,32 @@ const Home = () => {
     fetch(`/apis/products`, setProducts);
   }, []);
 
+  // search product
+  useEffect(() => {
+    console.log(search);
+    if (search === '' || search === undefined) {
+      fetch(`/apis/products`, setProducts);
+    } else {
+      fetch(`/apis/products?search=${search}`, setProducts);
+    }
+  }, [search]);
+
   return (
     <Layout>
       <Styles>
         <section>
           <Card className="mb-1 flex jc-sb align-items-center">
-            <Input className="mb-0" />
-            <Button className="mb-0" to="/dashboard/products/add" isButton={false}>
-              <i className="fa-solid fa-plus"  ></i> Add Product
+            <Input className="mb-0" value={search} update={setSearch} />
+            <Button
+              className="mb-0"
+              to="/dashboard/products/add"
+              isButton={false}
+            >
+              <i className="fa-solid fa-plus"></i> Add Product
             </Button>
           </Card>
           <Card>
-            <table>
+            <Table>
               <thead>
                 <tr>
                   <th>#</th>
@@ -64,18 +67,21 @@ const Home = () => {
               </thead>
               <tbody>
                 {products.map(
-                  ({
-                    product_id,
-                    name,
-                    image_url,
-                    price,
-                    quantity,
-                    created_at,
-                    updated_at,
-                    description,
-                  }) => (
+                  (
+                    {
+                      product_id,
+                      name,
+                      image_url,
+                      price,
+                      quantity,
+                      created_at,
+                      updated_at,
+                      description,
+                    },
+                    index
+                  ) => (
                     <tr key={product_id}>
-                      <td>{product_id}</td>
+                      <td>{index + 1}</td>
                       <td>{name}</td>
                       <td>
                         <img src={image_url} alt={name} />
@@ -89,7 +95,7 @@ const Home = () => {
                   )
                 )}
               </tbody>
-            </table>
+            </Table>
           </Card>
         </section>
       </Styles>

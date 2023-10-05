@@ -1,4 +1,4 @@
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { logoutAsync } from '../../features/userSlice';
@@ -81,6 +81,7 @@ const navbarTogglerHandler = (e) => {
 
 const Navbar = () => {
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
   return (
     <Styles>
       <div className="container flex jc-sb align-items-center">
@@ -102,7 +103,8 @@ const Navbar = () => {
         <ul className="flex right-links">
           <li>
             <Link to="/">
-              <i className="fa-regular fa-user fa-lg"></i> Rauf
+              <i className="fa-regular fa-user fa-lg"></i>{' '}
+              {user && user.username}
             </Link>
           </li>
           <li onClick={() => dispatch(logoutAsync())}>

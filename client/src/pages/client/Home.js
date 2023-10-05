@@ -34,7 +34,6 @@ const Home = () => {
       <HeroSection />
       <Products header={'Best Sellling Products'} data={bestProducts || []} />
       <Products header={'New Products'} data={newProducts || []} />
-      <Products header={'Recommended Products'} data={data || []} />
     </div>
   );
 };

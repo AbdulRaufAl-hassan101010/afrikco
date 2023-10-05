@@ -27,7 +27,7 @@ const Styles = styled.nav`
   }
 
   ul {
-    li > a {
+    & > li > a {
       display: block;
       font-weight: thin;
       letter-spacing: 0.15rem;
@@ -56,6 +56,10 @@ const Styles = styled.nav`
     li {
       cursor: pointer;
     }
+  }
+
+  .p-0 {
+    padding: 0 !important;
   }
 
   .search {
@@ -143,7 +147,7 @@ const Navbar = ({ checkAuth = true }) => {
       <div className="container flex jc-sb align-items-center">
         <div className="logo-container">
           <Link to="/" className="logo">
-            Afrikco
+            Ghantrade
           </Link>
           <div className="logo-icons">
             <Link to="/login">Login</Link>
@@ -202,6 +206,11 @@ const Navbar = ({ checkAuth = true }) => {
               <>
                 {userData.username}
                 <ul className="sub-links">
+                  <li className="p-0">
+                    <Link className="sub-links" to="/orders">
+                      orders
+                    </Link>
+                  </li>
                   <li onClick={loggOutHandler}>logout</li>
                 </ul>
               </>

@@ -8,6 +8,7 @@ import sqlalchemy.exc
 import pymysql.err
 from sqlalchemy import desc, asc
 from server.apis.cart import delete_user_cart
+from server.apis.send_mail import send_email
 
 
 def add_order():
@@ -126,6 +127,7 @@ def get_all_orders():
         # Retrieve query parameters from the request URL
         user_id = request.args.get('user_id', None)
         order_id = request.args.get('order_id', None)
+        order_status_id = request.args.get('order_status_id', None)
         order_in = request.args.get('order_in', 'desc')
         order_column = request.args.get('order_column', 'created_at')
         search = request.args.get('search', None)
@@ -140,6 +142,9 @@ def get_all_orders():
         # Filter by 'order_id' if provided
         if order_id is not None:
             query = query.filter_by(order_id=order_id)
+        # Filter by 'order_status_id' if provided
+        if order_status_id is not None:
+            query = query.filter_by(order_status_id=order_status_id)
 
 
         # Apply search filter if 'search_term' is provided
@@ -172,6 +177,18 @@ def get_all_orders():
             
         
         serialized_data = serialize(orders)
+        for index, order in enumerate(orders):
+            serialized_orders = serialize(order.orders)
+            serialized_user = serialize(order.user)
+            serialized_data[index]["orders"] = serialized_orders
+            serialized_data[index]["user"] = serialized_user
+            serialized_data[index]["order_status"] = order.order_status.name
+            
+            for product_index, product in enumerate(order.orders):
+                serialized_product = serialize(product.product)
+                serialized_data[index]["orders"][product_index]['name'] = serialized_product['name']
+                serialized_data[index]["orders"][product_index]['image_url'] = serialized_product['image_url']
+            
 
         return jsonify(serialized_data), 200
     except Exception as e:
@@ -266,6 +283,9 @@ def update_order(order_id):
 
         db.session.commit()
 
+        # send order status email to client
+        send_email(email_receiver=order.user.email, subject=f"Order has been {order.order_status.name}", body=f"Order {order.order_id} has been {order.order_status.name}, thank you for shopping with us")
+
         serialized_data = serialize(order)
         return jsonify(serialized_data), 200
     except (sqlalchemy.exc.SQLAlchemyError, pymysql.err.OperationalError,pymysql.err.IntegrityError) as e:
@@ -275,18 +295,18 @@ def update_order(order_id):
         if "Cannot add or update a child row: a foreign key constraint fails" in str(e):
             error['message'] = "order status doesn't exist"
         status = 400
-        return jsonify(error), status
+        return jsonify(str(e)), status
     except ValueError as e:
         print(e)
-        error = {"error": e}
+        error = {"error": str(e)}
         status = 400
-        return jsonify(error), status
+        return jsonify(str(error)), status
     except NotFoundError as e:
         error = e.error_dict
         status = 404
-        return jsonify(error), status
+        return jsonify(str(e)), status
     except Exception as e:
         print(e)
         error = {'error': "Internal Error", 'message':""}
         status = 500
-        return jsonify(error), status
+        return jsonify(e), status

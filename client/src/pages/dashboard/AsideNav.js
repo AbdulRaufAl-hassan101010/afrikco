@@ -31,29 +31,26 @@ const AsideNav = () => {
       <ul>
         <li className="mb-1">
           <div className="flex jc-sb">
-            <Link to="">Products</Link>
-            <span>{productsConut}</span>
+            <Link to="/dashboard">Products</Link>
+            <span></span>
           </div>
           <hr />
         </li>
         <li className="mb-1">
           <div className="flex jc-sb">
-            <Link to="">Orders</Link>
-            <span>{ordersCount}</span>
+            <Link to="/dashboard/orders">Orders</Link>
+            <span>
+              <i className="fa fa-shopping-cart fa-lg"></i>
+            </span>
           </div>
           <hr />
         </li>
         <li className="mb-1">
           <div className="flex jc-sb">
-            <Link to="">Completed Orders</Link>
-            <span>{ordersCount}</span>
-          </div>
-          <hr />
-        </li>
-        <li className="mb-1">
-          <div className="flex jc-sb">
-            <Link to="">Users</Link>
-            <span>{ordersCount}</span>
+            <Link to="/dashboard/users">Users</Link>
+            <span>
+              <i className="fa fa-users fa-lg"></i>
+            </span>
           </div>
           <hr />
         </li>

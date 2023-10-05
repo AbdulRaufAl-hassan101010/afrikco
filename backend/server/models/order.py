@@ -12,6 +12,7 @@ class Order(db.Model):
 
     # Define a relationship to OrderProducts
     orders = db.relationship('OrderProducts', backref='orders', lazy=True)
+    user = db.relationship('User', backref='orders', lazy=True)
 
 
     # Define a relationship to OrderProducts
