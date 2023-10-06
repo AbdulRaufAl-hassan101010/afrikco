@@ -56,8 +56,8 @@ app.register_blueprint(apis_blueprint, url_prefix="/apis")
 @app.route('/cart')
 @app.route('/orders')
 @app.route('/signup')
-@app.route('/password-reset')
-@app.route('/password-reset/<string:token>')
+@app.route('/passwordreset')
+@app.route('/passwordreset/<string:token>')
 @app.route('/users/success')
 @app.route('/users/verify/<string:tok>')
 @app.route('/users/verification/email')
@@ -65,7 +65,7 @@ app.register_blueprint(apis_blueprint, url_prefix="/apis")
 @app.route('/dashboard/products/add')
 @app.route('/dashboard/orders')
 @app.route('/dashboard/users')
-def static_pages(token, tok, id):
+def static_pages():
     return send_from_directory(app.static_folder, 'index.html')
 
 

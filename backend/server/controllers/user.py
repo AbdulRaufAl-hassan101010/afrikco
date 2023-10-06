@@ -204,7 +204,7 @@ def password_reset():
 
         # send email
         send_email(email_receiver=email, subject="Password reset",
-                   body=f'Link on the link to change your password. {base_url}/password-reset/{token.token}. Token will expire in 15 mins')
+                   body=f'Link on the link to change your password. {base_url}/passwordreset/{token.token}. Token will expire in 15 mins')
 
         return jsonify({}), 200
     except Exception as error:
