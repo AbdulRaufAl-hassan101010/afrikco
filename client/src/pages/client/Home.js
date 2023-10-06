@@ -25,7 +25,7 @@ const Home = () => {
   }, []);
   // GET NEW PRODUCTS
   useEffect(() => {
-    fetchProducts(`/apis/products?&limit=6`, setNewProduct);
+    fetchProducts(`/apis/products?limit=6`, setNewProduct);
   }, []);
 
   return (
