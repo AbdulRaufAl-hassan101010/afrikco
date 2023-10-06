@@ -59,13 +59,13 @@ app.register_blueprint(apis_blueprint, url_prefix="/apis")
 @app.route('/password-reset')
 @app.route('/password-reset/<string:token>')
 @app.route('/users/success')
-@app.route('/users/verify/<string:token>')
+@app.route('/users/verify/<string:tok>')
 @app.route('/users/verification/email')
 @app.route('/dashboard')
 @app.route('/dashboard/products/add')
 @app.route('/dashboard/orders')
 @app.route('/dashboard/users')
-def static_pages():
+def static_pages(token, tok, id):
     return send_from_directory(app.static_folder, 'index.html')
 
 
