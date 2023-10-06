@@ -48,6 +48,7 @@ from server.apis import apis_blueprint
 # Register the 'apis' blueprint with the Flask app
 app.register_blueprint(apis_blueprint, url_prefix="/apis")
 
+
 # Define routes for static pages
 @app.route('/')
 @app.route('/products/<int:id>')
