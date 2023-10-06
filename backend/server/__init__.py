@@ -50,23 +50,16 @@ app.register_blueprint(apis_blueprint, url_prefix="/apis")
 
 
 # Define routes for static pages
-@app.route('/')
-@app.route('/products/<int:id>')
-@app.route('/login')
-@app.route('/cart')
-@app.route('/orders')
-@app.route('/signup')
-@app.route('/passwordreset')
-@app.route('/passwordreset/<string:token>')
-@app.route('/users/success')
-@app.route('/users/verify/<string:tok>')
-@app.route('/users/verification/email')
-@app.route('/dashboard')
-@app.route('/dashboard/products/add')
-@app.route('/dashboard/orders')
-@app.route('/dashboard/users')
-def static_pages():
-    return send_from_directory(app.static_folder, 'index.html')
+# @app.route('/', defaults={'path': 'index.html'})
+# @app.route('/<path:path>')
+# def catch_all(path):
+#     print(path)
+#     return send_from_directory(app.static_folder, path)
+
+# Define routes for static pages
+@app.errorhandler(404)   
+def not_found(e):   
+  return app.send_static_file('index.html')
 
 
 # Define a function to create the Flask app

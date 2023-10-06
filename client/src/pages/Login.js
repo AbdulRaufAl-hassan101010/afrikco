@@ -123,7 +123,7 @@ const Login = () => {
 
             <small>
               Forgotten password?{' '}
-              <Link to="/password-reset" className="text-primary">
+              <Link to="/passwordreset" className="text-primary">
                 {' '}
                 click
               </Link>
