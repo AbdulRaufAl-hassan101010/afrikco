@@ -150,8 +150,8 @@ const Navbar = ({ checkAuth = true }) => {
             Ghantrade
           </Link>
           <div className="logo-icons">
-            <Link to="/login">Login</Link>
-            <Link>
+            {userData ? userData.username : <Link to="/login">Login</Link>}
+            <Link to="/cart">
               <i className="fa-solid fa-cart-shopping fa-xl"></i>
             </Link>
             <i
@@ -173,6 +173,7 @@ const Navbar = ({ checkAuth = true }) => {
           <li>
             <Link to="/">Categories</Link>
           </li>
+          {userData ? <li onClick={loggOutHandler}>logout</li> : null}
         </ul>
         <ul className="flex right-links">
           <li>

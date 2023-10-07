@@ -9,6 +9,12 @@ const Styles = styled.div`
     grid-gap: 2rem;
     align-items: start;
   }
+
+  @media (max-width: 978px) {
+    main {
+      grid-template-columns: 1fr;
+    }
+  }
 `;
 
 const Layout = ({ children }) => {

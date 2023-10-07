@@ -20,105 +20,116 @@ import ChangePassword from './pages/ChangePassword';
 import AddProduct from './pages/dashboard/AddProduct';
 import DashboardOrders from './pages/dashboard/Orders';
 import Users from './pages/dashboard/Users';
+import Comment from './pages/client/Comment';
 
 // routes
-const router = createBrowserRouter([
+const router = createBrowserRouter(
+  [
+    {
+      path: '/',
+      element: (
+        <PrivateRoute>
+          <Home />
+        </PrivateRoute>
+      ),
+    },
+    {
+      path: '/products/:id',
+      element: <Product />,
+    },
+    {
+      path: '/cart',
+      element: (
+        <PrivateRoute>
+          <Cart />
+        </PrivateRoute>
+      ),
+    },
+    {
+      path: '/login',
+      element: <Login />,
+    },
+    {
+      path: '/passwordreset',
+      element: <PasswordReset />,
+    },
+    {
+      path: '/passwordreset/:token',
+      element: <ChangePassword />,
+    },
+    {
+      path: '/users/success',
+      element: (
+        <PrivateRoute>
+          <UserSuccess />
+        </PrivateRoute>
+      ),
+    },
+    {
+      path: '/users/verify/:token',
+      element: <EmailVerification />,
+    },
+    {
+      path: '/users/verification/email',
+      element: (
+        <PrivateRoute>
+          <EmailVerificationMessage />
+        </PrivateRoute>
+      ),
+    },
+    {
+      path: '/orders',
+      element: (
+        <PrivateRoute>
+          <Orders />
+        </PrivateRoute>
+      ),
+    },
+    {
+      path: '/signup',
+      element: <Signup />,
+    },
+    {
+      path: '/comment/:token/:product_id',
+      element: <Comment />,
+    },
+    {
+      path: '/dashboard',
+      element: (
+        <PrivateAdminRoute>
+          <DashboardHome />
+        </PrivateAdminRoute>
+      ),
+    },
+    {
+      path: '/dashboard/products/add',
+      element: (
+        <PrivateAdminRoute>
+          <AddProduct />
+        </PrivateAdminRoute>
+      ),
+    },
+    {
+      path: '/dashboard/orders',
+      element: (
+        <PrivateAdminRoute>
+          <DashboardOrders />
+        </PrivateAdminRoute>
+      ),
+    },
+    {
+      path: '/dashboard/users',
+      element: (
+        <PrivateAdminRoute>
+          <Users />
+        </PrivateAdminRoute>
+      ),
+    },
+  ],
   {
-    path: '/',
-    element: (
-      <PrivateRoute>
-        <Home />
-      </PrivateRoute>
-    ),
-  },
-  {
-    path: '/products/:id',
-    element: <Product />,
-  },
-  {
-    path: '/cart',
-    element: (
-      <PrivateRoute>
-        <Cart />
-      </PrivateRoute>
-    ),
-  },
-  {
-    path: '/login',
-    element: <Login />,
-  },
-  {
-    path: '/passwordreset',
-    element: <PasswordReset />,
-  },
-  {
-    path: '/passwordreset/:token',
-    element: <ChangePassword />,
-  },
-  {
-    path: '/users/success',
-    element: (
-      <PrivateRoute>
-        <UserSuccess />
-      </PrivateRoute>
-    ),
-  },
-  {
-    path: '/users/verify/:token',
-    element: <EmailVerification />,
-  },
-  {
-    path: '/users/verification/email',
-    element: (
-      <PrivateRoute>
-        <EmailVerificationMessage />
-      </PrivateRoute>
-    ),
-  },
-  {
-    path: '/orders',
-    element: (
-      <PrivateRoute>
-        <Orders />
-      </PrivateRoute>
-    ),
-  },
-  {
-    path: '/signup',
-    element: <Signup />,
-  },
-  {
-    path: '/dashboard',
-    element: (
-      <PrivateAdminRoute>
-        <DashboardHome />
-      </PrivateAdminRoute>
-    ),
-  },
-  {
-    path: '/dashboard/products/add',
-    element: (
-      <PrivateAdminRoute>
-        <AddProduct />
-      </PrivateAdminRoute>
-    ),
-  },
-  {
-    path: '/dashboard/orders',
-    element: (
-      <PrivateAdminRoute>
-        <DashboardOrders />
-      </PrivateAdminRoute>
-    ),
-  },
-  {
-    path: '/dashboard/users',
-    element: (
-      <PrivateAdminRoute>
-        <Users />
-      </PrivateAdminRoute>
-    ),
-  },
-]);
+    restoreScroll: 'manual',
+    
+  }
+);
 
 export default router;

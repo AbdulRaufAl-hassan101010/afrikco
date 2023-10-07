@@ -18,6 +18,12 @@ const Styles = styled.div`
     grid-template-columns: 10rem auto;
     gap: 1rem;
   }
+
+  @media (max-width: 796px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
 `;
 
 const fetchCartProducts = async (setCart) => {

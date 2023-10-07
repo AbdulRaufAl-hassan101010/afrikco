@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 
 const Styles = styled.div`
@@ -10,8 +11,14 @@ const Styles = styled.div`
   }
 `;
 
-const Input = ({ placeholder = '', value, update, type = 'text' }) => {
-
+const Input = ({
+  placeholder = '',
+  value,
+  update,
+  type = 'text',
+  max,
+  min,
+}) => {
   const onChangeHandler = (event) => {
     if (update) {
       update(event.target.value);
@@ -23,8 +30,10 @@ const Input = ({ placeholder = '', value, update, type = 'text' }) => {
       <input
         type={type}
         placeholder={placeholder}
-        defaultValue={value}
+        value={value}
         onChange={onChangeHandler}
+        max={max}
+        min={min}
       />
     </Styles>
   );

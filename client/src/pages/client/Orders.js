@@ -3,6 +3,7 @@ import Navbar from '../../components/client/Navbar';
 import { useCallback, useEffect, useState } from 'react';
 import axios from 'axios';
 import Card from '../../components/Card';
+import PreventAutomaticScrolling from '../../PreventAutomaticScrolling';
 
 const Styles = styled.main``;
 
@@ -49,37 +50,39 @@ function OrderItem({ data }) {
   }, [toggle]);
 
   return (
-    <Card className="mb-1">
-      <div className="flex jc-sb align-items-center mb-1">
-        <h3>{order_id}</h3>
-        <div>{created_at}</div>
-        <div>{order_status}</div>
-        <i
-          className={`fa-solid fa-chevron-${!toggle ? 'up' : 'down'}`}
-          onClick={toggleHandler}
-        ></i>
-      </div>
-      {toggle ? (
-        <>
-          <div className="mb-1">
-            {orders.map(({ name, product_id, price, quantity }) => {
-              return (
-                <div key={product_id}>
-                  <div className="flex jc-sb align-items-center mb-1">
-                    <h4>{name}</h4>
-                    <div>Price {price}</div>
-                    <div>Qty: {quantity}</div>
+    <PreventAutomaticScrolling>
+      <Card className="mb-1">
+        <div className="flex jc-sb align-items-center mb-1">
+          <h3>{order_id}</h3>
+          <div>{created_at}</div>
+          <div>{order_status}</div>
+          <i
+            className={`fa-solid fa-chevron-${!toggle ? 'up' : 'down'}`}
+            onClick={toggleHandler}
+          ></i>
+        </div>
+        {toggle ? (
+          <>
+            <div className="mb-1">
+              {orders.map(({ name, product_id, price, quantity }) => {
+                return (
+                  <div key={product_id}>
+                    <div className="flex jc-sb align-items-center mb-1">
+                      <h4>{name}</h4>
+                      <div>Price {price}</div>
+                      <div>Qty: {quantity}</div>
+                    </div>
+                    <hr />
                   </div>
-                  <hr />
-                </div>
-              );
-            })}
-          </div>
-          <div className="text-primary">
-            <b>Total: &#x20B5;{totals}</b>
-          </div>
-        </>
-      ) : null}
-    </Card>
+                );
+              })}
+            </div>
+            <div className="text-primary">
+              <b>Total: &#x20B5;{totals}</b>
+            </div>
+          </>
+        ) : null}
+      </Card>
+    </PreventAutomaticScrolling>
   );
 }

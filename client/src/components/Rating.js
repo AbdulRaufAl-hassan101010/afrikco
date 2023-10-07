@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 const Rating = ({ rating }) => {
   // Define an array to hold the rating icons
   const ratingIcons = [];
@@ -16,7 +18,9 @@ const Rating = ({ rating }) => {
             <i key={i} className="fas fa-star-half-alt text-gold"></i>
           );
         } else {
-          ratingIcons.push(<i key={i} className={`fas fa-star- text-grey`}></i>);
+          ratingIcons.push(
+            <i key={i} className={`fas fa-star- text-grey`}></i>
+          );
         }
       } else {
         ratingIcons.push(<i key={i} className="fas fa-star text-gold"></i>);
