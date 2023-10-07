@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import Navbar from '../../components/client/Navbar';
 import HeroSection from '../../components/client/HeroSection';
 import Products from '../../components/client/Products';
-import data from '../../data';
 import axios from 'axios';
 import PreventAutomaticScrolling from '../../PreventAutomaticScrolling';
 

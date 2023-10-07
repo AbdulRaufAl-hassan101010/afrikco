@@ -50,6 +50,8 @@ def get_products(id=None):
         order_column = request.args.get('order_column', 'created_at')
         search = request.args.get('search', None)
         limit = request.args.get('limit', None)
+        filter_by = request.args.get('filter_by', None)
+        filter = request.args.get('filter', None)
 
         # Create the base query for the Product table
         query = Product.query
@@ -57,6 +59,11 @@ def get_products(id=None):
         # Filter by 'id' if provided
         if id is not None:
             query = query.filter_by(product_id=id)
+
+        print(filter_by is not None and filter is not None)
+
+        if filter_by is not None and filter is not None:
+            query = query.filter(getattr(Product, filter_by) == filter)
 
 
         # Apply search filter if 'search_term' is provided

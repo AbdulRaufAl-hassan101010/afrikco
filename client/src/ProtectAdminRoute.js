@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { isLoggedInAsAdminAsync } from './features/userSlice';
 
 const PrivateAdminRoute = ({ children }) => {
@@ -8,15 +8,9 @@ const PrivateAdminRoute = ({ children }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // const location = useLocation();
-
-  // useEffect(() => {
-  //   window.scrollTo(0, 0); // Scroll to the top on each route change
-  // }, [location.pathname]);
-
-  // useEffect(() => {
-  //   dispatch(isLoggedInAsAdminAsync());
-  // }, [dispatch]);
+  useEffect(() => {
+    dispatch(isLoggedInAsAdminAsync());
+  }, [dispatch]);
 
   useEffect(() => {
     if (user === false) {

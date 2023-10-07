@@ -139,7 +139,9 @@ const Navbar = ({ checkAuth = true }) => {
   }, [checkAuth, dispatch]);
 
   useEffect(() => {
-    getSearchedData(searchInput, setSearchedData);
+    if (searchInput !== '') {
+      getSearchedData(searchInput, setSearchedData);
+    }
   }, [searchInput]);
 
   return (

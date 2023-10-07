@@ -2,7 +2,6 @@ import { styled } from 'styled-components';
 import Navbar from '../../components/client/Navbar';
 import Card from '../../components/Card';
 import { useEffect, useState } from 'react';
-import data from '../../data';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import Products from '../../components/client/Products';
 import axios from 'axios';
@@ -86,6 +85,7 @@ const Product = () => {
   const [comments, setComments] = useState([]);
   const [selectedQuantity, setSelectedQuanity] = useState(prevQuantity || 1);
   const [message, setMessage] = useState(null);
+  const [relatedProduct, setRelatedProducts] = useState([]);
 
   // GET PRODUCT BY ID
   useEffect(() => {
@@ -123,6 +123,21 @@ const Product = () => {
       }
     }
   }, [id, product, product.in_cart, product.quantity]);
+
+  useEffect(() => {
+    // fetch related products
+    const fetchRelatedProducts = async () => {
+      try {
+        const res = await axios(
+          `/apis/products?filter_by=category_id&filter=${product.category_id}`
+        );
+        setRelatedProducts(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchRelatedProducts();
+  }, [product.category_id]);
 
   const addToCartHandler = async () => {
     setMessage(null);
@@ -234,19 +249,23 @@ const Product = () => {
             <p className="text-grey">{product.description}</p>
           </div>
 
-          <Products data={data} header="Related Products" />
+          <Products data={relatedProduct} header="Related Products" />
 
           {/* comments */}
           <div className="container">
-            <h3 className="mb-1">Comments</h3>
-            {/* display comments */}
-            {comments.map(({ text, username, comment, score }, index) => (
-              <Card className="mb-1" key={index * 100}>
-                <b>{username}</b>
-                <div className="text-grey">{comment}</div>
-                <div>{<Rating rating={score} />}</div>
-              </Card>
-            ))}
+            {comments.length < 1 ? null : (
+              <>
+                <h3 className="mb-1">Comments</h3>
+                {/* display comments */}
+                {comments.map(({  username, comment, score }, index) => (
+                  <Card className="mb-1" key={index * 100}>
+                    <b>{username}</b>
+                    <div className="text-grey">{comment}</div>
+                    <div>{<Rating rating={score} />}</div>
+                  </Card>
+                ))}
+              </>
+            )}
           </div>
         </Styles>
       </PreventAutomaticScrolling>
