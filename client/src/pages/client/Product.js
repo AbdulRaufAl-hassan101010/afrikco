@@ -127,14 +127,17 @@ const Product = () => {
   useEffect(() => {
     // fetch related products
     const fetchRelatedProducts = async () => {
-      try {
-        const res = await axios(
-          `/apis/products?filter_by=category_id&filter=${product.category_id}`
-        );
-        setRelatedProducts(res.data);
-      } catch (error) {
-        console.log(error);
+      if (product.category_id) {
+        try {
+          const res = await axios(
+            `/apis/products?filter_by=category_id&filter=${product.category_id}`
+          );
+          setRelatedProducts(res.data);
+        } catch (error) {
+          console.log(error);
+        }
       }
+      
     };
     fetchRelatedProducts();
   }, [product.category_id]);
