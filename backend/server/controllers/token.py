@@ -29,7 +29,12 @@ def generate_token(user_id, minutes=15):
 
 def is_expired(token):
     try:
-        token = Token.query.filter_by(token=token, user_id=session.get('user_id')).first()
+        if(session.get('user_id')) :
+            token = Token.query.filter_by(token=token, user_id=session.get('user_id')).first()
+        else:
+            token = Token.query.filter_by(token=token).first()
+
+        print(token)
 
         if token is None:           
             raise NotFoundError({"error": "Not Found", "message": "Not Found"})

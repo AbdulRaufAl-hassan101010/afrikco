@@ -14,11 +14,16 @@ def create_rating():
         comment = data.get('comment')
         token = data.get('token')
 
+        
+
+        
         if not (score and user_id and product_id and comment and token):
             return jsonify({"error": "Missing data"}), 400
         
         if(score > 5):
             return jsonify({"error": "ratings cant be more than 5"}), 400
+        
+        
         
 
         rating = Rating(score=score, user_id=user_id, product_id=product_id, comment=comment)
@@ -30,16 +35,19 @@ def create_rating():
         # Query the database to get the sum of ratings for the product
         rating_sum = Rating.query.filter_by(product_id=product_id).with_entities(func.sum(Rating.score)).scalar()
 
+        if rating_sum is None:
+            rating_sum = 0
+
         # Query the database to get the number of users who rated the product
         num_users_rated = Rating.query.filter_by(product_id=product_id).count()
 
         # Calculate the average rating
-        if num_users_rated > 0:
-            average_rating = rating_sum / num_users_rated
+        if rating_sum == 0 or num_users_rated == 0:
+            average_rating = 0
         else:
-            average_rating = 0  # Handle the case where no users have rated the product
+            average_rating = rating_sum / num_users_rated
+        
 
-        print(rating_sum , num_users_rated, rating_sum / num_users_rated)
         product.rating = average_rating
 
         

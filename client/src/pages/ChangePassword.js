@@ -79,11 +79,12 @@ const ChangePassword = () => {
         await axios(`/apis/tokens/${token}`);
       } catch (error) {
         navigate('/');
+        console.log(error);
       }
     };
 
     verifyToken();
-  }, []);
+  }, [navigate, token]);
 
   return (
     <>

@@ -15,7 +15,7 @@ ENVIRONMENT = environ.get("NODE_ENV", "development")
 if ENVIRONMENT == "production":
     base_url = "https://ghantrade.onrender.com"  # Change this to your production domain
 else:
-    base_url = "http://localhost:3000"  # Default to development domain
+    base_url = "http://localhost:5000"  # Default to development domain
 
 
 app = Flask(__name__, static_folder="../../client/build", static_url_path="")
