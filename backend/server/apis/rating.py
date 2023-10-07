@@ -16,7 +16,3 @@ def get_ratings_route(product_id):
 def get_rating_route(product_id, id):
    return get_rating(product_id=product_id, id=id)
 
-# Create a route to update a rating by ID
-@apis_blueprint.route('ratings/<int:id>', methods=['PUT'])
-def update_rating_route(id):
-    return update_rating(id=id)

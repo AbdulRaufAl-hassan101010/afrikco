@@ -15,12 +15,12 @@ def login_user():
         password = data.get('password')
 
         if not ((username or email) and password):
-            return jsonify({"error": "Missing data"}), 400
+            return jsonify({"error": "Missing data"}), 401
 
         user = User.query.filter_by(email=email).first()
 
         if user is None or user.check_password(password) is False:
-            return jsonify({"error": "Invalid credentials"}), 400
+            return jsonify({"error": "Invalid credentials"}), 401
 
         serialized_data = serialize(user)
 

@@ -8,6 +8,7 @@ import Card from '../components/Card';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { loginAsync } from '../features/userSlice';
+import Alert from '../components/Alert';
 
 const Styles = styled.main`
   display: flex;
@@ -62,7 +63,7 @@ const Styles = styled.main`
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  // const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [message, setMessage] = useState(null);
 
   const dispatch = useDispatch();
   const isLoggedIn = useSelector((state) => state.user);
@@ -86,20 +87,45 @@ const Login = () => {
 
       return navigate('/');
     }
-  }, [isLoggedIn, location.state, navigate]);
+  }, [isLoggedIn, location.state, message, navigate]);
+
+  // useEffect(() => {
+  //   if (message !== null)
+
+  // }, [message]);
+
+  useEffect(() => {
+    if (message) {
+      const timer = setTimeout(() => setMessage(null), 1000);
+
+      return () => {
+        clearTimeout(timer);
+      };
+    }
+  }, [message]);
 
   const loginHandler = useCallback(
     async (e) => {
       e.preventDefault();
       // Dispatch the loginAsync action with the form data
-      dispatch(loginAsync({ email, password }));
+      try {
+        dispatch(loginAsync({ email, password })).then((res) => {
+          if (res.error) {
+            setMessage({ message: 'Invalid credentials', type: 'danger' });
+          }
+        });
+      } catch (error) {
+        console.log(e);
+      }
     },
     [dispatch, email, password]
   );
 
   return (
     <>
-      <Navbar />
+      {/* alert */}
+      {message && <Alert message={message.message} type={message.type} />}
+      <Navbar checkAuth={false} />
       <Styles>
         <div className="wrapper">
           <form action="">

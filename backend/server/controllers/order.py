@@ -1,6 +1,6 @@
 from flask import jsonify, session, request
 from server.models import Order,OrderProducts, Product
-from server import db
+from server import db,base_url
 from server.apis.utils import serialize
 from server.utils import NotFoundError
 import uuid
@@ -9,6 +9,7 @@ import pymysql.err
 from sqlalchemy import desc, asc
 from server.apis.cart import delete_user_cart
 from server.apis.send_mail import send_email
+from server.apis.token import generate_token, remove_token_by_token
 
 
 def add_order():
@@ -66,6 +67,7 @@ def add_order():
         db.session.add_all(valid_order_products)
         db.session.commit()
 
+
         return jsonify({"message": "Order products added successfully."}), 200
     except (sqlalchemy.exc.SQLAlchemyError, pymysql.err.OperationalError,pymysql.err.IntegrityError) as e:
         # Rollback the transaction in case of a database error
@@ -83,9 +85,7 @@ def add_order():
             "error": "Duplicate Products",
             "message": "Duplicate Products"
             }
-            status = 400
-        
-        
+            status = 400      
         
     except (NotFoundError) as e:
         # Handle custom application-level errors here
@@ -274,11 +274,13 @@ def update_order(order_id):
 
         if order is None:
             raise NotFoundError({'error': "Not found", "message": f"order id:{order_id} not found."})
-        
+
+
         if order.order_status_id >= 3:
             serialized_data = serialize(order)
             return jsonify(serialized_data), 200
         
+        prev_status_id = order.order_status_id 
         order.order_status_id = order_status_id
 
         db.session.commit()
@@ -286,9 +288,20 @@ def update_order(order_id):
         # send order status email to client
         send_email(email_receiver=order.user.email, subject=f"Order has been {order.order_status.name}", body=f"Order {order.order_id} has been {order.order_status.name}, thank you for shopping with us")
 
+        if prev_status_id != 3 and  order_status_id == 3:
+            body = ""
+            user_id = order.user.user_id
+            for product in order.orders:     
+                token = generate_token(user_id=user_id, minutes=(24 * 7) * 60)
+                body += f"Leave a comment {base_url}/comment/{token.token}/{product.product_id} <br>"
+            send_email(email_receiver=order.user.email, subject="Review Products", body=body)
+
+        
+
         serialized_data = serialize(order)
         return jsonify(serialized_data), 200
     except (sqlalchemy.exc.SQLAlchemyError, pymysql.err.OperationalError,pymysql.err.IntegrityError) as e:
+        db.session.rollback()
         print(e)
         error = {"error": "Database error"}
 
@@ -297,15 +310,18 @@ def update_order(order_id):
         status = 400
         return jsonify(str(e)), status
     except ValueError as e:
+        db.session.rollback()
         print(e)
         error = {"error": str(e)}
         status = 400
         return jsonify(str(error)), status
     except NotFoundError as e:
+        db.session.rollback()
         error = e.error_dict
         status = 404
         return jsonify(str(e)), status
     except Exception as e:
+        db.session.rollback()
         print(e)
         error = {'error': "Internal Error", 'message':""}
         status = 500

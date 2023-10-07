@@ -1,5 +1,5 @@
 from server import db
-from flask import jsonify
+from flask import jsonify, session
 from server.models.token import Token
 from datetime import datetime, timedelta
 import uuid
@@ -8,7 +8,7 @@ from server.utils import NotFoundError, UnauthorizedError
 
 
 
-def generate_token(user_id):
+def generate_token(user_id, minutes=15):
     try:
         token_value = uuid.uuid4()
 
@@ -16,7 +16,7 @@ def generate_token(user_id):
             raise ValueError("Token value is required")
 
         # Calculate the expiration time as 15 minutes from the current time
-        expiration_time = datetime.utcnow() + timedelta(minutes=15)
+        expiration_time = datetime.utcnow() + timedelta(minutes=minutes)
 
         token = Token(token=token_value, expire_at=expiration_time, user_id=user_id)
         db.session.add(token)
@@ -29,10 +29,10 @@ def generate_token(user_id):
 
 def is_expired(token):
     try:
-        token = Token.query.filter_by(token=token).first()
+        token = Token.query.filter_by(token=token, user_id=session.get('user_id')).first()
 
         if token is None:           
-            raise NotFoundError({"error": "Not Found", "message": "Token expired"})
+            raise NotFoundError({"error": "Not Found", "message": "Not Found"})
 
         if token and token.is_expired():
             # remove token 
@@ -76,8 +76,6 @@ def remove_token_by_token(token):
             raise NotFoundError()
 
         db.session.delete(token)
-        db.session.commit()
-
         return {}    
     except Exception as e:
         raise e

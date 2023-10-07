@@ -43,6 +43,7 @@ def add_product():
     
 
 def get_products(id=None):
+    print(id)
     try:
         # # Retrieve query parameters from the request URL
         order = request.args.get('order', 'desc')

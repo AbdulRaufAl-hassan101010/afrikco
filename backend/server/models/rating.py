@@ -22,10 +22,11 @@ class Rating(db.Model):
     # Define a relationship to access the Product model
     product = db.relationship('Product', backref=db.backref('ratings', lazy=True))
 
-    def __init__(self, score, user_id, product_id):
+    def __init__(self, score, user_id, product_id, comment):
         self.score = score
         self.user_id = user_id
         self.product_id = product_id
+        self.comment = comment
 
     def __repr__(self):
         return f'<Rating {self.rating_id} for Product {self.product.name} by User {self.user.username}>'
