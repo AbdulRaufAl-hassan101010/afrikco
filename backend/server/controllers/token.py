@@ -29,12 +29,10 @@ def generate_token(user_id, minutes=15):
 
 def is_expired(token):
     try:
-        if(session.get('user_id')) :
+        if(session.get('user_id') is not None):
             token = Token.query.filter_by(token=token, user_id=session.get('user_id')).first()
         else:
             token = Token.query.filter_by(token=token).first()
-
-        print(token)
 
         if token is None:           
             raise NotFoundError({"error": "Not Found", "message": "Not Found"})
@@ -59,9 +57,6 @@ def get_token(token):
     except NotFoundError as e:
         print("Not Found:", e)  # Handle the NotFoundError
         return jsonify({"error": "Not Found"}), 404
-    except UnauthorizedError as e:
-        print("Unauthorized:", e)  # Handle the UnauthorizedError
-        return jsonify({"error": "Unauthorized"}), 401
     except Exception as e:
         print("Internal Server Error:", e)  # Handle other exceptions
         return jsonify({"error": "Internal Server Error"}), 500

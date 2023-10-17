@@ -41,8 +41,6 @@ const ChangePassword = () => {
           return setMessage({ type: 'danger', message: "Can't be empty" });
         }
 
-        console.log(password, confirmPassword)
-
         if (password !== confirmPassword) {
           return setMessage({ type: 'danger', message: "Password doesn't match" });
         }
