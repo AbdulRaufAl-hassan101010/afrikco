@@ -10,6 +10,7 @@ DB_NAME = environ.get("DB_NAME")
 DB_HOST = environ.get("DB_HOST")
 SECRET = environ.get("SECRET")
 ENVIRONMENT = environ.get("NODE_ENV", "development")
+DATABASE_TYPE = environ.get("NODE_ENV", "postgresql")
 
 # Define the base URL for both development and production
 if ENVIRONMENT == "production":
@@ -23,7 +24,8 @@ db = SQLAlchemy()
 CORS(app)
 
 # Configure the MySQL database connection URI
-app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}"
+
+app.config['SQLALCHEMY_DATABASE_URI'] = f"{DATABASE_TYPE}://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}"
 app.config['SECRET_KEY'] = SECRET
 
 
