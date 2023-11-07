@@ -10,7 +10,7 @@ DB_NAME = environ.get("DB_NAME")
 DB_HOST = environ.get("DB_HOST")
 SECRET = environ.get("SECRET")
 ENVIRONMENT = environ.get("NODE_ENV", "development")
-DATABASE_TYPE = environ.get("NODE_ENV", "postgresql")
+DATABASE_TYPE = environ.get("DATABASE_TYPE", "postgresql")
 
 # Define the base URL for both development and production
 if ENVIRONMENT == "production":
